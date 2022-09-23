@@ -1,6 +1,5 @@
 package ru.spartak.gard.ui.main_screen
 
-import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -15,33 +14,34 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.spartak.gard.ui.navigation.NavGraph
-import ru.spartak.gard.ui.navigation.Screen
+import ru.spartak.gard.ui.navigation.BottomScreen
 import ru.spartak.gard.ui.theme.Dark300
 import ru.spartak.gard.ui.theme.GardTheme
 import ru.spartak.gard.ui.theme.White
+import ru.spartak.gard.ui.theme.spacing
 
-@SuppressLint("UnusedMaterialScaffoldPaddingParameter")
 @Composable
 fun MainScreen() {
     val navController = rememberNavController()
-    val screens = listOf(
-        Screen.HomeScreen,
-        Screen.GamesScreen,
-        Screen.TasksScreen,
-        Screen.ShopScreen,
+    val bottomScreens = listOf(
+        BottomScreen.HomeScreen,
+        BottomScreen.GamesScreen,
+        BottomScreen.TasksScreen,
+        BottomScreen.ShopScreen,
     )
     GardTheme {
         Scaffold(
             bottomBar = {
                 BottomBar(
                     navController = navController,
-                    screens = screens
+                    bottomScreens = bottomScreens
                 )
             }
         ) {
             NavGraph(
                 navController = navController,
-                startDestination = Screen.HomeScreen.route
+                startDestination = BottomScreen.HomeScreen.route,
+                modifier=Modifier.padding(bottom = it.calculateBottomPadding())
             )
         }
     }
@@ -51,18 +51,18 @@ fun MainScreen() {
 @Composable
 fun BottomBar(
     navController: NavHostController,
-    screens: List<Screen>
+    bottomScreens: List<BottomScreen>
 ) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     BottomNavigation(
         backgroundColor = MaterialTheme.colors.secondary,
         elevation = 0.dp,
-        modifier = Modifier.height(88.dp)
+        modifier = Modifier.height(66.dp)
     ) {
-        screens.forEach { screen ->
+        bottomScreens.forEach { screen ->
             AddItem(
-                screen = screen,
+                bottomScreen = screen,
                 currentDestination = currentDestination,
                 navController = navController
             )
@@ -73,7 +73,7 @@ fun BottomBar(
 
 @Composable
 fun RowScope.AddItem(
-    screen: Screen,
+    bottomScreen: BottomScreen,
     currentDestination: NavDestination?,
     navController: NavHostController
 ) {
@@ -81,17 +81,17 @@ fun RowScope.AddItem(
         icon = {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
                 Icon(
-                    painter = painterResource(id = screen.icon),
+                    painter = painterResource(id = bottomScreen.icon),
                     contentDescription = "Navigation Icon"
                 )
-                PaddingValues(horizontal = 8.dp)
-                Text(text = screen.title)
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraSmall))
+                Text(text = bottomScreen.title, style=MaterialTheme.typography.caption)
             }
         },
         selected = currentDestination?.hierarchy?.any {
-            it.route == screen.route
+            it.route == bottomScreen.route
         } == true,
-        onClick = { navController.navigate(screen.route) },
+        onClick = { navController.navigate(bottomScreen.route) },
         unselectedContentColor = Dark300,
         selectedContentColor = White,
     )

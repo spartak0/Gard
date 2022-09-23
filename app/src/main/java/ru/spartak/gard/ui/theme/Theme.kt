@@ -45,7 +45,7 @@ fun GardTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable (
     CompositionLocalProvider(LocalSpacing provides Spacing()) {
         MaterialTheme(
             colors = colors,
-            typography = Typography,
+            typography = appTypography,
             shapes = Shapes,
             content = content
         )

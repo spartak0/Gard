@@ -1,3 +1,17 @@
 <resources>
     <string name="app_name">Gard</string>
+    <string name="welcome">Welcome,</string>
+    <string name="balance">Balance</string>
+    <string name="tasks">Tasks</string>
+    <string name="earnings">Your earnings</string>
+    <string name="today">Today</string>
+    <string name="yesterday">Yesterday,</string>
+    <string name="not_games_connect">You haven’t got\nany game connected</string>
+    <string name="add_first_game">Add your first game to start\nearning PTS</string>
+    <string name="to_the_games">To the games</string>
+    <string name="total">Total</string>
+    <string name="this_week">This week</string>
+    <string name="newbie">Newbie</string>
+    <string name="bonus">Bonus</string>
+    <string name="pts">PTS</string>
 </resources>

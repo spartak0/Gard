@@ -3,8 +3,18 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.189" />
+        <entry key="app/src/main/res/drawable/ic_123.xml" value="0.189" />
+        <entry key="app/src/main/res/drawable/ic_arrow_forward.xml" value="0.251" />
+        <entry key="app/src/main/res/drawable/ic_flash.xml" value="0.251" />
+        <entry key="app/src/main/res/drawable/ic_flash_deluxe.xml" value="0.251" />
+        <entry key="app/src/main/res/drawable/ic_fortnite_notification_false.xml" value="0.251" />
+        <entry key="app/src/main/res/drawable/ic_fotnite_natification_false.xml" value="0.189" />
+        <entry key="app/src/main/res/drawable/ic_g_pts.xml" value="0.251" />
         <entry key="app/src/main/res/drawable/ic_games_icon.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_home_icon.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_right_arrow.xml" value="0.251" />
+        <entry key="app/src/main/res/font/myd.xml" value="0.20989583333333334" />
       </map>
     </option>
   </component>
