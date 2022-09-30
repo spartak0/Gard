@@ -14,4 +14,11 @@
     <string name="newbie">Newbie</string>
     <string name="bonus">Bonus</string>
     <string name="pts">PTS</string>
+    <string name="back">Back</string>
+    <string name="levels">Levels</string>
+    <string name="starting_bonus">Starting bonus</string>
+    <string name="task_bonus">Task bonus</string>
+    <string name="current">Current</string>
+    <string name="edit">Edit</string>
+    <string name="profile">Profile</string>
 </resources>

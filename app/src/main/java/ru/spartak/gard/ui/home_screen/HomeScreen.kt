@@ -43,9 +43,9 @@ fun HomeScreen(navController: NavController) {
                 NotificationBell(countNotification = 1)
             }
             Spacer(modifier = Modifier.height(21.dp))
-            ProfileCard(onClick = {navController.navigate(Screen.LevelsScreen.route)})
+            ProfileCard(onClick = {navController.navigate(Screen.LevelScreen.route)})
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
-            Text(text = stringResource(R.string.balance), style = MaterialTheme.typography.h6, color = Text50)
+            Text(text = stringResource(R.string.balance), style = MaterialTheme.typography.h6)
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
             Row(modifier = Modifier.fillMaxWidth()) {
                 val ptsCardHeight = 90.dp
@@ -62,7 +62,7 @@ fun HomeScreen(navController: NavController) {
                 )
             }
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
-            Text(text = stringResource(R.string.tasks), style = MaterialTheme.typography.h6, color = Text50)
+            Text(text = stringResource(R.string.tasks), style = MaterialTheme.typography.h6)
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
             (0..2).forEach { _ ->
                 TasksCard()
@@ -70,7 +70,7 @@ fun HomeScreen(navController: NavController) {
             }
             CardConnectFirstGame()
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
-            Text(text = stringResource(R.string.earnings), style = MaterialTheme.typography.h6, color = Text50)
+            Text(text = stringResource(R.string.earnings), style = MaterialTheme.typography.h6)
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.mediumLarge))
             Text(text = stringResource(R.string.today), style = MaterialTheme.typography.body2, color = Text500)
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
@@ -116,8 +116,7 @@ fun EarningsCard() {
                 Column {
                     Text(
                         text = "MultiKill 30",
-                        style = MaterialTheme.typography.subtitle1,
-                        color = Text50
+                        style = MaterialTheme.typography.subtitle1
                     )
                     Text(
                         text = "Fortnite daily reward",
@@ -127,7 +126,7 @@ fun EarningsCard() {
                 }
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "+12", style = MaterialTheme.typography.subtitle1, color = Text50)
+                Text(text = "+12", style = MaterialTheme.typography.subtitle1)
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
                 Image(
                     painter = painterResource(id = R.drawable.ic_g_pts),
@@ -209,14 +208,13 @@ fun TasksCard() {
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
-                    painter = painterResource(id = R.drawable.profile_image),
+                    painter = painterResource(id = R.drawable.newbie_image),
                     contentDescription = null
                 )
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
                 Text(
                     text = "Fortnite tasks",
-                    style = MaterialTheme.typography.body1,
-                    color = Text50
+                    style = MaterialTheme.typography.body1
                 )
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
                 Icon(
@@ -234,7 +232,6 @@ fun TasksCard() {
                     Box(contentAlignment = Alignment.Center) {
                         Text(
                             text = "2 active",
-                            color = Text50,
                             style = MaterialTheme.typography.caption,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
@@ -252,7 +249,6 @@ fun TasksCard() {
                     Box(contentAlignment = Alignment.Center) {
                         Text(
                             text = "1 completed",
-                            color = Text50,
                             style = MaterialTheme.typography.caption,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
@@ -289,7 +285,7 @@ fun TotalPts(modifier: Modifier = Modifier) {
             )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "48 885", style = MaterialTheme.typography.h5, color = Text50)
+                Text(text = "48 885", style = MaterialTheme.typography.h5)
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
                 Image(
                     painter = painterResource(id = R.drawable.ic_g_pts),
@@ -318,7 +314,7 @@ fun WeekPts(modifier: Modifier = Modifier) {
             Text(text = stringResource(R.string.this_week), style = MaterialTheme.typography.body2, color = Text500)
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "+120", style = MaterialTheme.typography.h5, color = Text50)
+                Text(text = "+120", style = MaterialTheme.typography.h5)
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
                 Image(
                     painter = painterResource(id = R.drawable.ic_g_pts),
@@ -341,7 +337,7 @@ fun ProfileCard(onClick:()->Unit) {
             .background(MaterialTheme.colors.secondary, shape = RoundedCornerShape(4.dp))
     ) {
         Image(
-            painter = painterResource(id = R.drawable.profile_image),
+            painter = painterResource(id = R.drawable.newbie_image),
             contentScale = ContentScale.Fit,
             contentDescription = null
         )
@@ -356,7 +352,7 @@ fun ProfileCard(onClick:()->Unit) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = stringResource(R.string.newbie), style = MaterialTheme.typography.body1, color = Text50)
+                    Text(text = stringResource(R.string.newbie), style = MaterialTheme.typography.body1)
                     Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
                     Icon(
                         painter = painterResource(id = R.drawable.ic_right_arrow),
@@ -365,7 +361,7 @@ fun ProfileCard(onClick:()->Unit) {
                     )
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = "0%", style = MaterialTheme.typography.body1, color = Text50)
+                    Text(text = "0%", style = MaterialTheme.typography.body1)
                     Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
                     Image(
                         painter = painterResource(id = R.drawable.ic_g_pts),
@@ -408,7 +404,7 @@ fun ProfileCard(onClick:()->Unit) {
 @Composable
 fun Username(username: String) {
     Row(verticalAlignment = Alignment.CenterVertically) {
-        Text(text = username, style = MaterialTheme.typography.h5, color = Text50)
+        Text(text = username, style = MaterialTheme.typography.h5)
         Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
         Icon(
             painter = painterResource(id = R.drawable.ic_right_arrow),
