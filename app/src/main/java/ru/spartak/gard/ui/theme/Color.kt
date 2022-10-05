@@ -24,3 +24,7 @@ val Muted500 = Color(0xFF404040) //progress bar
 val Tertiary500 = Color(0xFF00DEC8)//progress bar
 val Yellow500 = Color(0xFFEAB308) //flash
 val Success500 = Color(0xFF22C55E)
+val Muted900 = Color(0xFF171717) //background
+val Muted700 = Color(0xFF404040) //border
+val Muted100 = Color(0xFFF5F5F5) //icon
+val Error500 = Color(0xFFEF4444) //error

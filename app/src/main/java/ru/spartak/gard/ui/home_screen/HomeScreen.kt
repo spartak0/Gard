@@ -9,6 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -18,6 +19,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ru.spartak.gard.R
+import ru.spartak.gard.ui.levels_screen.ParserDecimal
 import ru.spartak.gard.ui.navigation.Screen
 import ru.spartak.gard.ui.theme.*
 
@@ -32,37 +34,52 @@ fun HomeScreen(navController: NavController) {
                 .verticalScroll(state = rememberScrollState())
         ) {
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.mediumLarge))
-            Text(text = stringResource(R.string.welcome), style = MaterialTheme.typography.subtitle2, color = TrueGray500)
+            Text(
+                text = stringResource(R.string.welcome),
+                style = MaterialTheme.typography.subtitle2,
+                color = TrueGray500
+            )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Username(username = "nagibat8".uppercase())
-                NotificationBell(countNotification = 1)
+                Username(
+                    username = "nagibat8".uppercase(),
+                    onClick = { navController.navigate(Screen.ProfileScreen.route) })
+                NotificationBell(countNotification = 1, onClick = {})
             }
             Spacer(modifier = Modifier.height(21.dp))
-            ProfileCard(onClick = {navController.navigate(Screen.LevelScreen.route)})
+            ProfileCard(
+                levelImage = painterResource(id = R.drawable.newbie_image),
+                levelName = "Newbie",
+                progress = 0.7f,
+                levelUnlockFirst = 0,
+                levelUnlockSecond = 5000,
+                tasksBonus = 0,
+                onClick = { navController.navigate(Screen.LevelScreen.route) })
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
-            Text(text = stringResource(R.string.balance), style = MaterialTheme.typography.h6)
+            Subtitle(text = stringResource(R.string.balance))
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
             Row(modifier = Modifier.fillMaxWidth()) {
                 val ptsCardHeight = 90.dp
                 TotalPts(
+                    pts = 48885,
                     modifier = Modifier
                         .height(ptsCardHeight)
                         .weight(0.61f)
                 )
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
                 WeekPts(
-                    Modifier
+                    modifier = Modifier
                         .height(ptsCardHeight)
-                        .weight(0.39f)
+                        .weight(0.39f),
+                    pts = 120
                 )
             }
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
-            Text(text = stringResource(R.string.tasks), style = MaterialTheme.typography.h6)
+            Subtitle(text = stringResource(R.string.tasks))
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
             (0..2).forEach { _ ->
                 TasksCard()
@@ -70,20 +87,18 @@ fun HomeScreen(navController: NavController) {
             }
             CardConnectFirstGame()
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
-            Text(text = stringResource(R.string.earnings), style = MaterialTheme.typography.h6)
+            Subtitle(text = stringResource(R.string.earnings))
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.mediumLarge))
-            Text(text = stringResource(R.string.today), style = MaterialTheme.typography.body2, color = Text500)
+            EarningsSubtitle(
+                text = stringResource(R.string.today),
+            )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
             (0..2).forEach {
                 EarningsCard()
                 Spacer(modifier = Modifier.height(12.dp))
             }
             Spacer(modifier = Modifier.height(12.dp))
-            Text(
-                text = stringResource(R.string.yesterday)+" 03 May 2022",
-                style = MaterialTheme.typography.body2,
-                color = Text500
-            )
+            EarningsSubtitle(text = stringResource(R.string.yesterday) + " 03 May 2022")
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
             (0..2).forEach {
                 EarningsCard()
@@ -92,6 +107,20 @@ fun HomeScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(52.dp))
         }
     }
+}
+
+@Composable
+fun Subtitle(text: String) {
+    Text(text = text, style = MaterialTheme.typography.h6)
+}
+
+@Composable
+fun EarningsSubtitle(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.body2,
+        color = Text500
+    )
 }
 
 @Composable
@@ -153,7 +182,8 @@ fun CardConnectFirstGame() {
         ) {
             Column {
                 Text(
-                    text = stringResource(id = R.string.not_games_connect), style = MaterialTheme.typography.subtitle1
+                    text = stringResource(id = R.string.not_games_connect),
+                    style = MaterialTheme.typography.subtitle1
                 )
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
                 Text(
@@ -266,7 +296,7 @@ fun TasksCard() {
 }
 
 @Composable
-fun TotalPts(modifier: Modifier = Modifier) {
+fun TotalPts(pts: Int, modifier: Modifier = Modifier) {
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(4.dp),
@@ -285,7 +315,7 @@ fun TotalPts(modifier: Modifier = Modifier) {
             )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "48 885", style = MaterialTheme.typography.h5)
+                Text(text = ParserDecimal.pars(pts), style = MaterialTheme.typography.h5)
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
                 Image(
                     painter = painterResource(id = R.drawable.ic_g_pts),
@@ -300,7 +330,7 @@ fun TotalPts(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun WeekPts(modifier: Modifier = Modifier) {
+fun WeekPts(pts: Int, modifier: Modifier = Modifier) {
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(4.dp),
@@ -311,10 +341,14 @@ fun WeekPts(modifier: Modifier = Modifier) {
                 .fillMaxSize()
                 .padding(all = 16.dp)
         ) {
-            Text(text = stringResource(R.string.this_week), style = MaterialTheme.typography.body2, color = Text500)
+            Text(
+                text = stringResource(R.string.this_week),
+                style = MaterialTheme.typography.body2,
+                color = Text500
+            )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "+120", style = MaterialTheme.typography.h5)
+                Text(text = "+${ParserDecimal.pars(pts)}", style = MaterialTheme.typography.h5)
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
                 Image(
                     painter = painterResource(id = R.drawable.ic_g_pts),
@@ -326,7 +360,15 @@ fun WeekPts(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun ProfileCard(onClick:()->Unit) {
+fun ProfileCard(
+    levelImage: Painter,
+    levelName: String,
+    progress: Float,
+    levelUnlockFirst: Int,
+    levelUnlockSecond: Int,
+    tasksBonus: Int,
+    onClick: () -> Unit
+) {
     Row(
         Modifier
             .fillMaxWidth()
@@ -337,7 +379,7 @@ fun ProfileCard(onClick:()->Unit) {
             .background(MaterialTheme.colors.secondary, shape = RoundedCornerShape(4.dp))
     ) {
         Image(
-            painter = painterResource(id = R.drawable.newbie_image),
+            painter = levelImage,
             contentScale = ContentScale.Fit,
             contentDescription = null
         )
@@ -352,7 +394,10 @@ fun ProfileCard(onClick:()->Unit) {
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = stringResource(R.string.newbie), style = MaterialTheme.typography.body1)
+                    Text(
+                        text = levelName,
+                        style = MaterialTheme.typography.body1
+                    )
                     Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
                     Icon(
                         painter = painterResource(id = R.drawable.ic_right_arrow),
@@ -361,7 +406,10 @@ fun ProfileCard(onClick:()->Unit) {
                     )
                 }
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(text = "0%", style = MaterialTheme.typography.body1)
+                    Text(
+                        text = "${ParserDecimal.pars(tasksBonus)}%",
+                        style = MaterialTheme.typography.body1
+                    )
                     Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
                     Image(
                         painter = painterResource(id = R.drawable.ic_g_pts),
@@ -381,8 +429,16 @@ fun ProfileCard(onClick:()->Unit) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(text = "0", style = MaterialTheme.typography.caption, color = Text500)
-                Text(text = "5 000 " + stringResource(R.string.pts), style = MaterialTheme.typography.caption, color = Text500)
+                Text(
+                    text = ParserDecimal.pars(levelUnlockFirst),
+                    style = MaterialTheme.typography.caption,
+                    color = Text500
+                )
+                Text(
+                    text = "${ParserDecimal.pars(levelUnlockSecond)} ${stringResource(R.string.pts)}",
+                    style = MaterialTheme.typography.caption,
+                    color = Text500
+                )
             }
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraSmall))
             LinearProgressIndicator(
@@ -391,7 +447,7 @@ fun ProfileCard(onClick:()->Unit) {
                     .clip(RoundedCornerShape(4.dp))
                     .height(4.dp),
                 backgroundColor = Muted500,
-                progress = 0.7f,
+                progress = progress,
                 color = Tertiary500
             )
         }
@@ -402,8 +458,12 @@ fun ProfileCard(onClick:()->Unit) {
 
 
 @Composable
-fun Username(username: String) {
-    Row(verticalAlignment = Alignment.CenterVertically) {
+fun Username(username: String, onClick: () -> Unit) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier
+            .clip(RoundedCornerShape(4.dp))
+            .clickable { onClick() }) {
         Text(text = username, style = MaterialTheme.typography.h5)
         Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
         Icon(
@@ -415,7 +475,7 @@ fun Username(username: String) {
 }
 
 @Composable
-fun NotificationBell(countNotification: Int) {
+fun NotificationBell(countNotification: Int, onClick: () -> Unit) {
     BadgedBox(badge = {
         if (countNotification > 0) {
             Badge(
@@ -430,7 +490,7 @@ fun NotificationBell(countNotification: Int) {
                 )
             }
         }
-    }) {
+    }, modifier = Modifier.clickable { onClick() }) {
         Icon(
             painter = painterResource(
                 id = if (countNotification == 0) R.drawable.ic_notification_bell

@@ -14,6 +14,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import ru.spartak.gard.R
 import ru.spartak.gard.ui.theme.spacing
@@ -22,11 +23,12 @@ import ru.spartak.gard.ui.theme.spacing
 @Composable
 fun TopBar(
     subtitleText: String,
+    modifier: Modifier=Modifier,
     leftView: @Composable (RowScope.() -> Unit)? = null,
-    rightView: @Composable (RowScope.() -> Unit)? = null
+    rightView: @Composable (RowScope.() -> Unit)? = null,
 ) {
     Box(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .height(41.dp)
     ) {
@@ -36,7 +38,9 @@ fun TopBar(
             modifier = Modifier.align(Alignment.Center)
         )
         leftView?.let {
-            Row(modifier = Modifier.align(Alignment.CenterStart)) { it() }
+            Row(modifier = Modifier.align(Alignment.CenterStart)) {
+                it()
+            }
         }
         rightView?.let {
             Row(modifier = Modifier.align(Alignment.CenterEnd)) { it() }
@@ -47,9 +51,11 @@ fun TopBar(
 
 @Composable
 fun BackBtn(onClick: () -> Unit) {
-    TopAppBarBtn(
+    TopAppBarView(
         icon = painterResource(id = R.drawable.ic_arrow_back),
-        text = stringResource(id = R.string.back)
+        text = stringResource(id = R.string.back),
+        leftMargin = MaterialTheme.spacing.smallMedium,
+        rightMargin = MaterialTheme.spacing.large
     ) {
         onClick()
     }
@@ -57,16 +63,18 @@ fun BackBtn(onClick: () -> Unit) {
 
 @Composable
 fun EditBtn(onClick: () -> Unit) {
-    TopAppBarBtn(
+    TopAppBarView(
         icon = painterResource(id = R.drawable.ic_edit),
-        text = stringResource(R.string.edit)
+        text = stringResource(R.string.edit),
+        leftMargin = MaterialTheme.spacing.large,
+        rightMargin = MaterialTheme.spacing.smallMedium
     ) {
         onClick()
     }
 }
 
 @Composable
-fun TopAppBarBtn(icon: Painter, text: String, onClick: () -> Unit) {
+fun TopAppBarView(icon: Painter, text: String, modifier: Modifier = Modifier,leftMargin:Dp,rightMargin:Dp, onClick: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxHeight()
@@ -76,7 +84,7 @@ fun TopAppBarBtn(icon: Painter, text: String, onClick: () -> Unit) {
             },
         verticalAlignment = Alignment.CenterVertically
     ) {
-        Spacer(modifier = Modifier.width(MaterialTheme.spacing.smallMedium))
+        Spacer(modifier = Modifier.width(leftMargin))
         Icon(
             painter = icon,
             contentDescription = null,
@@ -88,6 +96,6 @@ fun TopAppBarBtn(icon: Painter, text: String, onClick: () -> Unit) {
             style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Medium),
             color = MaterialTheme.colors.primary
         )
-        Spacer(modifier = Modifier.width(MaterialTheme.spacing.mediumLarge))
+        Spacer(modifier = Modifier.width(rightMargin))
     }
 }

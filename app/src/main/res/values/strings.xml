@@ -21,4 +21,9 @@
     <string name="current">Current</string>
     <string name="edit">Edit</string>
     <string name="profile">Profile</string>
+    <string name="gard_referrals">GARD referrals</string>
+    <string name="your_refferal_code">Your refferal code</string>
+    <string name="info_refferal_card_1">Let your friends join GARD with you referral link. Earn\ </string>
+    <string name="info_refferal_card_2">25 PTS\  </string>
+    <string name="info_refferal_card_3">for each friend after finishing first task!</string>
 </resources>
