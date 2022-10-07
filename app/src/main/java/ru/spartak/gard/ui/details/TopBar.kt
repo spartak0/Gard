@@ -29,8 +29,6 @@ fun TopBar(
 ) {
     Box(
         modifier = modifier
-            .fillMaxWidth()
-            .height(41.dp)
     ) {
         Text(
             text = subtitleText,

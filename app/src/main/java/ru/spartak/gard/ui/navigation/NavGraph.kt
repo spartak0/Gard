@@ -5,6 +5,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import ru.spartak.gard.ui.edit_screen.EditScreen
 import ru.spartak.gard.ui.home_screen.HomeScreen
 import ru.spartak.gard.ui.levels_screen.LevelsScreen
 import ru.spartak.gard.ui.profile_screen.ProfileScreen
@@ -37,6 +38,9 @@ fun NavGraph(
         }
         composable(route = Screen.ProfileScreen.route) {
             ProfileScreen(navController = navController)
+        }
+        composable(route = Screen.EditScreen.route) {
+            EditScreen(navController = navController)
         }
     }
 }

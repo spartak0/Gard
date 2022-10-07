@@ -24,6 +24,7 @@ import ru.spartak.gard.R
 import ru.spartak.gard.ui.details.BackBtn
 import ru.spartak.gard.ui.details.EditBtn
 import ru.spartak.gard.ui.details.TopBar
+import ru.spartak.gard.ui.navigation.Screen
 import ru.spartak.gard.ui.theme.*
 
 @Composable
@@ -54,11 +55,15 @@ fun ProfileScreen(navController: NavController) {
             AnimatedVisibility(visible = !visibleToast.value) {
                 ProfileTopBar(
                     backOnClick = { navController.navigateUp() },
-                    editOnClick = {},
-                    modifier = Modifier.padding(
-                        top = MaterialTheme.spacing.small,
-                        bottom = MaterialTheme.spacing.mediumLarge
-                    )
+                    editOnClick = { navController.navigate(Screen.EditScreen.route) },
+                    modifier = Modifier
+                        .padding(
+                            top = MaterialTheme.spacing.small,
+                            bottom = MaterialTheme.spacing.mediumLarge
+                        )
+                        .fillMaxWidth()
+                        .height(41.dp)
+
                 )
             }
             Username(text = "Nagibator228")
@@ -99,33 +104,37 @@ fun Toast(iconId: Int, backgroundColor: Color, text: String, modifier: Modifier 
 
 @Composable
 fun SettingsItem(onClick: () -> Unit) {
-    AlsoItem(title = "Settings", iconId = R.drawable.ic_settings, onClick = onClick)
+    AlsoItem(
+        title = stringResource(R.string.settings),
+        iconId = R.drawable.ic_settings,
+        onClick = onClick
+    )
 }
 
 @Composable
 fun LevelItem(onClick: () -> Unit) {
-    AlsoItem(title = "Level", iconId = R.drawable.ic_out, onClick = onClick)
+    AlsoItem(title = stringResource(R.string.level), iconId = R.drawable.ic_out, onClick = onClick)
 }
 
 @Composable
 fun FAQItem(onClick: () -> Unit) {
-    AlsoItem(title = "FAQ", iconId = R.drawable.ic_out, onClick = onClick)
+    AlsoItem(title = stringResource(R.string.faq), iconId = R.drawable.ic_out, onClick = onClick)
 }
 
 @Composable
 fun PoliceItem(onClick: () -> Unit) {
-    AlsoItem(title = "Terms of Police", iconId = R.drawable.ic_out, onClick = onClick)
+    AlsoItem(title = stringResource(R.string.police), iconId = R.drawable.ic_out, onClick = onClick)
 }
 
 @Composable
 fun LogOutItem(onClick: () -> Unit) {
-    AlsoItem(title = "Log Out", textColor = Error500, onClick = onClick)
+    AlsoItem(title = stringResource(R.string.log_out), textColor = Error500, onClick = onClick)
 }
 
 @Composable
 fun AlsoItem(
     title: String,
-    textColor: androidx.compose.ui.graphics.Color = Text50,
+    textColor: Color = Text50,
     iconId: Int? = null,
     onClick: () -> Unit
 ) {

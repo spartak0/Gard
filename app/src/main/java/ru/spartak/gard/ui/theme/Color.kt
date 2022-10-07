@@ -20,6 +20,7 @@ val Gold1 = Color(0xFFD29760) //not basic a s gradient
 val Gold2 = Color(0xFFD9B63D) //not basic a s gradient
 val Text50 = Color(0xFFFAFAFA)
 val Text500 = Color(0xFF737373)
+val Text600 = Color(0xFF525252)
 val Muted500 = Color(0xFF404040) //progress bar
 val Tertiary500 = Color(0xFF00DEC8)//progress bar
 val Yellow500 = Color(0xFFEAB308) //flash

@@ -1,9 +1,6 @@
 package ru.spartak.gard.ui.levels_screen
 
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
@@ -48,10 +45,9 @@ fun TopBarLevels(backOnClick: () -> Unit) {
     TopBar(
         subtitleText = stringResource(id = R.string.levels),
         leftView = {
-            TopBar(subtitleText = stringResource(id = R.string.levels), leftView = {
-                BackBtn {
-                    backOnClick()
-                }
-            })
-        })
+            BackBtn { backOnClick() }
+        }, modifier = Modifier
+            .fillMaxWidth()
+            .height(41.dp)
+    )
 }
