@@ -1,10 +1,12 @@
 package ru.spartak.gard.ui.main_activity
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import ru.spartak.gard.ui.main_screen.MainScreen
+import ru.spartak.gard.ui.settings_screen.LocaleHelper
 import ru.spartak.gard.ui.theme.GardTheme
 
 class MainActivity : ComponentActivity() {
@@ -16,5 +18,11 @@ class MainActivity : ComponentActivity() {
                 MainScreen()
             }
         }
+    }
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(
+            LocaleHelper.setLocale(newBase, LocaleHelper.getLocaleCode(newBase))
+        )
     }
 }

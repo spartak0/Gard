@@ -38,7 +38,4 @@
     <string name="transfered_to_starting">After this you gonna be transfered to starting point</string>
     <string name="General">General</string>
     <string name="language">Language</string>
-    <string name="copied">Copied</string>
-    <string name="saved">Your changes have been saved!</string>
-    <string name="notifications">Notifications</string>
 </resources>

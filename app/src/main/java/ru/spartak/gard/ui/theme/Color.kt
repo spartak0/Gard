@@ -29,3 +29,5 @@ val Muted900 = Color(0xFF171717) //background
 val Muted700 = Color(0xFF404040) //border
 val Muted100 = Color(0xFFF5F5F5) //icon
 val Error500 = Color(0xFFEF4444) //error
+val Error600 = Color(0xFFDC2626) //error
+val Primary600 = Color(0xFF0891B2)

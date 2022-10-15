@@ -82,7 +82,7 @@ fun HomeScreen(navController: NavController) {
             Subtitle(text = stringResource(R.string.tasks))
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
             (0..2).forEach { _ ->
-                TasksCard()
+                TasksCard(countActive = 2, countCompleted = 1, onClick = {})
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             }
             CardConnectFirstGame()
@@ -94,15 +94,25 @@ fun HomeScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
             (0..2).forEach {
-                EarningsCard()
+                EarningsCard(
+                    subtitle = "MultiKill 30",
+                    text = "Fortnite daily reward",
+                    iconId = R.drawable.fortnite_logo_natification_false,
+                    pts = 12
+                )
                 Spacer(modifier = Modifier.height(12.dp))
             }
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.smallMedium))
             EarningsSubtitle(text = stringResource(R.string.yesterday) + " 03 May 2022")
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
             (0..2).forEach {
-                EarningsCard()
-                Spacer(modifier = Modifier.height(12.dp))
+                EarningsCard(
+                    subtitle = "MultiKill 15",
+                    text = "Apex daily reward",
+                    iconId = R.drawable.fortnite_logo_natification_false,
+                    pts = 16
+                )
+                Spacer(modifier = Modifier.height(MaterialTheme.spacing.smallMedium))
             }
             Spacer(modifier = Modifier.height(52.dp))
         }
@@ -124,7 +134,7 @@ fun EarningsSubtitle(text: String) {
 }
 
 @Composable
-fun EarningsCard() {
+fun EarningsCard(subtitle: String, text: String, iconId: Int, pts: Int) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -137,25 +147,25 @@ fun EarningsCard() {
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 Image(
-                    painter = painterResource(id = R.drawable.fortnite_logo_natification_false),
+                    painter = painterResource(id = iconId),
                     contentDescription = null,
                     modifier = Modifier.size(48.dp),
                     contentScale = ContentScale.Fit
                 )
                 Column {
                     Text(
-                        text = "MultiKill 30",
+                        text = subtitle,
                         style = MaterialTheme.typography.subtitle1
                     )
                     Text(
-                        text = "Fortnite daily reward",
+                        text = text,
                         style = MaterialTheme.typography.caption,
                         color = Text500
                     )
                 }
             }
             Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(text = "+12", style = MaterialTheme.typography.subtitle1)
+                Text(text = "+$pts", style = MaterialTheme.typography.subtitle1)
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
                 Image(
                     painter = painterResource(id = R.drawable.ic_g_pts),
@@ -220,12 +230,15 @@ fun CardConnectFirstGame() {
 }
 
 @Composable
-fun TasksCard() {
+fun TasksCard(countActive: Int, countCompleted: Int, onClick: () -> Unit) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
+            .clip(RoundedCornerShape(4.dp))
+            .clickable {
+                onClick()
+            }
             .height(80.dp),
-        shape = RoundedCornerShape(4.dp),
         color = MaterialTheme.colors.secondary
     ) {
         Row(
@@ -261,31 +274,33 @@ fun TasksCard() {
                 ) {
                     Box(contentAlignment = Alignment.Center) {
                         Text(
-                            text = "2 active",
+                            text = "$countActive active",
                             style = MaterialTheme.typography.caption,
                             textAlign = TextAlign.Center,
                             modifier = Modifier
-                                .padding(horizontal = 12.dp)
+                                .padding(horizontal = MaterialTheme.spacing.smallMedium)
                         )
                     }
 
                 }
-                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-                Surface(
-                    shape = RoundedCornerShape(2.dp),
-                    color = Success500,
-                    modifier = Modifier.height(20.dp)
-                ) {
-                    Box(contentAlignment = Alignment.Center) {
-                        Text(
-                            text = "1 completed",
-                            style = MaterialTheme.typography.caption,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .padding(horizontal = 12.dp)
-                        )
-                    }
+                if (countCompleted > 0) {
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+                    Surface(
+                        shape = RoundedCornerShape(2.dp),
+                        color = Success500,
+                        modifier = Modifier.height(20.dp)
+                    ) {
+                        Box(contentAlignment = Alignment.Center) {
+                            Text(
+                                text = "$countCompleted completed",
+                                style = MaterialTheme.typography.caption,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .padding(horizontal = MaterialTheme.spacing.smallMedium)
+                            )
+                        }
 
+                    }
                 }
 
             }
@@ -386,7 +401,7 @@ fun ProfileCard(
         Column(
             Modifier
                 .fillMaxWidth()
-                .padding(start = 12.dp, end = 16.dp)
+                .padding(start = MaterialTheme.spacing.smallMedium, end = 16.dp)
         ) {
             Spacer(modifier = Modifier.height(16.dp))
             Row(
@@ -424,7 +439,7 @@ fun ProfileCard(
 
                 }
             }
-            Spacer(modifier = Modifier.height(12.dp))
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.smallMedium))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween

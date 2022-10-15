@@ -23,7 +23,7 @@ import ru.spartak.gard.ui.theme.spacing
 @Composable
 fun TopBar(
     subtitleText: String,
-    modifier: Modifier=Modifier,
+    modifier: Modifier,
     leftView: @Composable (RowScope.() -> Unit)? = null,
     rightView: @Composable (RowScope.() -> Unit)? = null,
 ) {

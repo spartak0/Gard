@@ -1,25 +1,38 @@
 package ru.spartak.gard.ui.profile_screen
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import androidx.compose.ui.window.DialogProperties
 import androidx.navigation.NavController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ru.spartak.gard.R
 import ru.spartak.gard.ui.details.BackBtn
 import ru.spartak.gard.ui.details.EditBtn
@@ -27,19 +40,27 @@ import ru.spartak.gard.ui.details.TopBar
 import ru.spartak.gard.ui.navigation.Screen
 import ru.spartak.gard.ui.theme.*
 
+@SuppressLint("CoroutineCreationDuringComposition", "RememberReturnType")
 @Composable
-fun ProfileScreen(navController: NavController) {
+fun ProfileScreen(navController: NavController, showSaveToast: Boolean = false) {
     GardTheme {
         Column(
-            modifier = Modifier
-                .padding(horizontal = MaterialTheme.spacing.medium)
+            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
         ) {
             val visibleToast = remember { mutableStateOf(false) }
-            AnimatedVisibility(visible = visibleToast.value) {
+            /// TODO: add delay after navigation
+            val visibleSaveToast = remember { mutableStateOf(showSaveToast)}
+            val visibleDialog = remember { mutableStateOf(false) }
+            AnimatedVisibility(visible = visibleSaveToast.value) {
+                CoroutineScope(Dispatchers.Main).launch{
+                    delay(1000)
+                }
                 Toast(
                     iconId = R.drawable.ic_check_mark,
                     backgroundColor = Success500,
-                    text = "Copied",
+                    text = if (showSaveToast) stringResource(R.string.saved) else stringResource(
+                        R.string.saved
+                    ),
                     modifier = Modifier
                         .padding(
                             start = MaterialTheme.spacing.small,
@@ -48,11 +69,31 @@ fun ProfileScreen(navController: NavController) {
                             bottom = MaterialTheme.spacing.small
                         )
                         .fillMaxWidth()
-                        .height(45.dp)
-
+                        .height(45.dp),
+                    showState = visibleSaveToast
                 )
             }
-            AnimatedVisibility(visible = !visibleToast.value) {
+
+            AnimatedVisibility(visible = visibleToast.value) {
+                Toast(
+                    iconId = R.drawable.ic_check_mark,
+                    backgroundColor = Success500,
+                    text = if (showSaveToast) stringResource(R.string.saved) else stringResource(
+                        R.string.copied
+                    ),
+                    modifier = Modifier
+                        .padding(
+                            start = MaterialTheme.spacing.small,
+                            end = MaterialTheme.spacing.small,
+                            top = 20.dp,
+                            bottom = MaterialTheme.spacing.small
+                        )
+                        .fillMaxWidth()
+                        .height(45.dp),
+                    showState = visibleToast
+                )
+            }
+            AnimatedVisibility(visible = !visibleToast.value && !visibleSaveToast.value) {
                 ProfileTopBar(
                     backOnClick = { navController.navigateUp() },
                     editOnClick = { navController.navigate(Screen.EditScreen.route) },
@@ -72,7 +113,7 @@ fun ProfileScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
             RefferalsCard(refferalCode = "FF33GG", visibleToast)
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
-            SettingsItem(onClick = {})
+            SettingsItem(onClick = { navController.navigate(Screen.SettingsScreen.route) })
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             LevelItem(onClick = {})
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
@@ -80,13 +121,115 @@ fun ProfileScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             PoliceItem(onClick = {})
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.mediumLarge))
-            LogOutItem(onClick = {})
+            LogOutItem(onClick = { visibleDialog.value = true })
+            if (visibleDialog.value) {
+                LogOutDialog(
+                    showDialog = visibleDialog,
+                    modifier = Modifier
+                        .padding(horizontal = MaterialTheme.spacing.medium)
+                        .padding(bottom = 40.dp)
+                        .bottomAlign()
+                        .fillMaxWidth()
+                ) {
+                    //todo log out on click
+                }
+            }
+
         }
     }
 }
 
+fun delayReturn(value: Boolean): Boolean {
+    return value
+}
+
+
+fun Modifier.bottomAlign() = layout { measurable, constraints ->
+    val placeable = measurable.measure(constraints);
+    layout(constraints.maxWidth, constraints.maxHeight) {
+        placeable.place(0, constraints.maxHeight - placeable.height, 10f)
+    }
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun Toast(iconId: Int, backgroundColor: Color, text: String, modifier: Modifier = Modifier) {
+fun LogOutDialog(showDialog: MutableState<Boolean>, modifier: Modifier, onClick: () -> Unit) {
+    Dialog(
+        onDismissRequest = { showDialog.value = false },
+        properties = DialogProperties(usePlatformDefaultWidth = false),
+    ) {
+        Column(
+            modifier = modifier
+                .background(MaterialTheme.colors.secondary, RoundedCornerShape(4.dp)),
+            horizontalAlignment = Alignment.End,
+        ) {
+            Text(
+                text = stringResource(R.string.sure_log_out),
+                style = MaterialTheme.typography.subtitle1,
+                modifier = Modifier
+                    .padding(MaterialTheme.spacing.medium)
+                    .fillMaxWidth()
+            )
+            Divider(modifier = Modifier.fillMaxWidth(), color = Muted700, thickness = 1.dp)
+            Text(
+                text = stringResource(R.string.transfered_to_starting),
+                style = MaterialTheme.typography.body2,
+                modifier = Modifier
+                    .padding(MaterialTheme.spacing.medium)
+                    .fillMaxWidth()
+            )
+            Divider(modifier = Modifier.fillMaxWidth(), color = Muted700, thickness = 1.dp)
+            Row(modifier = Modifier.padding(MaterialTheme.spacing.medium)) {
+                Box(
+                    modifier = Modifier
+                        .height(41.dp)
+                        .border(1.dp, Muted700, RoundedCornerShape(4.dp))
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(
+                            color = MaterialTheme.colors.secondary
+                        )
+                        .clickable {
+                            showDialog.value = false
+                        }, contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Cancel",
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = MaterialTheme.spacing.smallMedium),
+                        style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Medium)
+                    )
+                }
+                Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
+                Box(
+                    modifier = Modifier
+                        .height(41.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .background(Error600)
+                        .clickable { onClick() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = "Log Out",
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.padding(horizontal = MaterialTheme.spacing.smallMedium),
+                        style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Medium)
+                    )
+                }
+            }
+
+        }
+    }
+}
+
+@SuppressLint("CoroutineCreationDuringComposition")
+@Composable
+fun Toast(
+    iconId: Int,
+    backgroundColor: Color,
+    text: String,
+    showState: MutableState<Boolean>,
+    modifier: Modifier = Modifier
+) {
     Row(
         modifier = modifier.background(backgroundColor, RoundedCornerShape(4.dp)),
         verticalAlignment = Alignment.CenterVertically,
@@ -96,9 +239,12 @@ fun Toast(iconId: Int, backgroundColor: Color, text: String, modifier: Modifier 
         Icon(painter = painterResource(id = iconId), contentDescription = null, tint = Text50)
         Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
         Text(
-            text = text,
-            style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Normal)
+            text = text, style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Normal)
         )
+    }
+    CoroutineScope(Dispatchers.IO).launch {
+        delay(2000)
+        showState.value = false
     }
 }
 
@@ -133,10 +279,7 @@ fun LogOutItem(onClick: () -> Unit) {
 
 @Composable
 fun AlsoItem(
-    title: String,
-    textColor: Color = Text50,
-    iconId: Int? = null,
-    onClick: () -> Unit
+    title: String, textColor: Color = Text50, iconId: Int? = null, onClick: () -> Unit
 ) {
     Row(
         modifier = Modifier

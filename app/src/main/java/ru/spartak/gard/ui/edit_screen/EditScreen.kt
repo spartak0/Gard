@@ -1,5 +1,6 @@
 package ru.spartak.gard.ui.edit_screen
 
+import android.os.Bundle
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -9,6 +10,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -22,14 +24,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import androidx.navigation.NavController
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import ru.spartak.gard.R
 import ru.spartak.gard.ui.details.BackBtn
 import ru.spartak.gard.ui.details.TopBar
+import ru.spartak.gard.ui.navigation.Screen
+import ru.spartak.gard.ui.navigation.navigate
 import ru.spartak.gard.ui.theme.*
 
 @Composable
@@ -69,12 +71,29 @@ fun EditScreen(navController: NavController) {
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
             ) {
+                val loadState = remember {
+                    mutableStateOf(false)
+                }
                 SaveBtn(
                     text = stringResource(R.string.save),
                     modifier = Modifier
                         .padding(MaterialTheme.spacing.medium)
                         .fillMaxWidth()
-                        .height(40.dp), onClick = {
+                        .height(40.dp),
+                    loadState = loadState,
+                    onClick = {
+                        CoroutineScope(Dispatchers.Main).launch {
+                            loadState.value = true
+                            //todo remove in vm
+                            val tmp = CoroutineScope(Dispatchers.IO).launch {
+                                delay(2000)
+                            }
+                            tmp.join()
+                            loadState.value=false
+                            navController.navigate(route=Screen.ProfileScreen.route,params= bundleOf("123" to true))
+                        }
+
+
                     }
                 )
                 Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp, color = Dark200)
@@ -84,8 +103,7 @@ fun EditScreen(navController: NavController) {
 }
 
 @Composable
-fun SaveBtn(modifier: Modifier = Modifier, onClick: () -> Unit, text: String) {
-    val loadState = remember { mutableStateOf(false) }
+fun SaveBtn(modifier: Modifier = Modifier, onClick: () -> Unit, text: String, loadState: MutableState<Boolean>) {
     Box(modifier = modifier) {
         Box(
             modifier = Modifier
@@ -95,12 +113,6 @@ fun SaveBtn(modifier: Modifier = Modifier, onClick: () -> Unit, text: String) {
                     RoundedCornerShape(4.dp)
                 )
                 .clickable {
-                    loadState.value = true
-                    //todo remove in vm
-                    CoroutineScope(Dispatchers.IO).launch {
-                        delay(2000)
-                        loadState.value = false
-                    }
                     onClick()
                 },
             contentAlignment = Alignment.Center,

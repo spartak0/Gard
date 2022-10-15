@@ -69,11 +69,6 @@ fun RefferalsCard(refferalCode: String, toastVisibleState:MutableState<Boolean>)
                     .width(120.dp), onClick = {
                     clipboardManager.setText(AnnotatedString(refferalCode))
                     toastVisibleState.value=true
-                    //todo remove in vm
-                    CoroutineScope(Dispatchers.IO).launch {
-                        delay(2000)
-                        toastVisibleState.value=false
-                    }
                 })
             }
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
