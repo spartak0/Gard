@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import ru.spartak.gard.R
 import ru.spartak.gard.ui.theme.*
+import ru.spartak.gard.utils.ParserDecimal
 
 @Composable
 fun LevelCard(level: Level, levelStatus: LevelStatus, number: String) {

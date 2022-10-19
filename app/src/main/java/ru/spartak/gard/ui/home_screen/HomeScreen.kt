@@ -15,12 +15,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ru.spartak.gard.R
-import ru.spartak.gard.ui.levels_screen.ParserDecimal
+import ru.spartak.gard.utils.ParserDecimal
 import ru.spartak.gard.ui.navigation.Screen
+import ru.spartak.gard.ui.navigation.navigate
 import ru.spartak.gard.ui.theme.*
 
 
@@ -48,7 +50,7 @@ fun HomeScreen(navController: NavController) {
                 Username(
                     username = "nagibat8".uppercase(),
                     onClick = { navController.navigate(Screen.ProfileScreen.route) })
-                NotificationBell(countNotification = 1, onClick = {})
+                NotificationBell(countNotification = 1, onClick = {navController.navigate(Screen.NotificationsScreen.route)})
             }
             Spacer(modifier = Modifier.height(21.dp))
             ProfileCard(

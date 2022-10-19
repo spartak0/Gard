@@ -40,12 +40,16 @@ import ru.spartak.gard.R
 import ru.spartak.gard.ui.details.BackBtn
 import ru.spartak.gard.ui.details.TopBar
 import ru.spartak.gard.ui.theme.*
+import ru.spartak.gard.utils.LocaleHelper
 
 
 @Composable
 fun SettingsScreen(navController: NavController) {
     GardTheme {
-        Column(modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)) {
+        Column(
+            modifier = Modifier
+                .padding(horizontal = MaterialTheme.spacing.medium)
+        ) {
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             SettingsTopBar(
                 modifier = Modifier

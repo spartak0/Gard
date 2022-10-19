@@ -2,7 +2,7 @@ package ru.spartak.gard.ui.app
 
 import android.app.Application
 import android.content.Context
-import ru.spartak.gard.ui.settings_screen.LocaleHelper
+import ru.spartak.gard.utils.LocaleHelper
 
 class App : Application() {
     override fun attachBaseContext(base: Context) {

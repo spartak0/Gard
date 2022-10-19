@@ -1,4 +1,4 @@
-package ru.spartak.gard.ui.levels_screen
+package ru.spartak.gard.utils
 
 object ParserDecimal {
     fun pars(decimal:Int):String{

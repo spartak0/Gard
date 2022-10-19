@@ -1,6 +1,7 @@
 package ru.spartak.gard.ui.profile_screen
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -11,23 +12,23 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
+import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -39,20 +40,30 @@ import ru.spartak.gard.ui.details.EditBtn
 import ru.spartak.gard.ui.details.TopBar
 import ru.spartak.gard.ui.navigation.Screen
 import ru.spartak.gard.ui.theme.*
+import ru.spartak.gard.utils.Constant
+import kotlin.math.log
 
-@SuppressLint("CoroutineCreationDuringComposition", "RememberReturnType")
+@SuppressLint("CoroutineCreationDuringComposition", "RememberReturnType",
+    "UnrememberedMutableState"
+)
 @Composable
-fun ProfileScreen(navController: NavController, showSaveToast: Boolean = false) {
+fun ProfileScreen(
+    navController: NavController,
+    showSaveToast: Boolean = false,
+    levelOnClick:()->Unit
+) {
+
+    val visibleToast = remember { mutableStateOf(false) }
+    val visibleSaveToast = mutableStateOf(showSaveToast)
+    val visibleDialog = remember { mutableStateOf(false) }
+
     GardTheme {
         Column(
-            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
+            modifier = Modifier
+                .padding(horizontal = MaterialTheme.spacing.medium)
         ) {
-            val visibleToast = remember { mutableStateOf(false) }
-            /// TODO: add delay after navigation
-            val visibleSaveToast = remember { mutableStateOf(showSaveToast)}
-            val visibleDialog = remember { mutableStateOf(false) }
             AnimatedVisibility(visible = visibleSaveToast.value) {
-                CoroutineScope(Dispatchers.Main).launch{
+                CoroutineScope(Dispatchers.Main).launch {
                     delay(1000)
                 }
                 Toast(
@@ -70,8 +81,12 @@ fun ProfileScreen(navController: NavController, showSaveToast: Boolean = false) 
                         )
                         .fillMaxWidth()
                         .height(45.dp),
-                    showState = visibleSaveToast
+                    dismiss = {
+                        visibleSaveToast.value=false
+                        navController.previousBackStackEntry?.arguments?.putAll(bundleOf(Constant.SAVE_TOAST_KEY to false))
+                    }
                 )
+
             }
 
             AnimatedVisibility(visible = visibleToast.value) {
@@ -90,7 +105,9 @@ fun ProfileScreen(navController: NavController, showSaveToast: Boolean = false) 
                         )
                         .fillMaxWidth()
                         .height(45.dp),
-                    showState = visibleToast
+                    dismiss = {
+                        visibleToast.value=false
+                    }
                 )
             }
             AnimatedVisibility(visible = !visibleToast.value && !visibleSaveToast.value) {
@@ -115,7 +132,7 @@ fun ProfileScreen(navController: NavController, showSaveToast: Boolean = false) 
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
             SettingsItem(onClick = { navController.navigate(Screen.SettingsScreen.route) })
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-            LevelItem(onClick = {})
+            LevelItem(onClick = { levelOnClick()})
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             FAQItem(onClick = {})
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
@@ -139,10 +156,6 @@ fun ProfileScreen(navController: NavController, showSaveToast: Boolean = false) 
     }
 }
 
-fun delayReturn(value: Boolean): Boolean {
-    return value
-}
-
 
 fun Modifier.bottomAlign() = layout { measurable, constraints ->
     val placeable = measurable.measure(constraints);
@@ -150,6 +163,7 @@ fun Modifier.bottomAlign() = layout { measurable, constraints ->
         placeable.place(0, constraints.maxHeight - placeable.height, 10f)
     }
 }
+
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
@@ -227,8 +241,8 @@ fun Toast(
     iconId: Int,
     backgroundColor: Color,
     text: String,
-    showState: MutableState<Boolean>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    dismiss:()->Unit,
 ) {
     Row(
         modifier = modifier.background(backgroundColor, RoundedCornerShape(4.dp)),
@@ -244,7 +258,7 @@ fun Toast(
     }
     CoroutineScope(Dispatchers.IO).launch {
         delay(2000)
-        showState.value = false
+        dismiss()
     }
 }
 

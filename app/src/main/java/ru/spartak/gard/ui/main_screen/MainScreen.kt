@@ -1,5 +1,6 @@
 package ru.spartak.gard.ui.main_screen
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -9,16 +10,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import ru.spartak.gard.ui.navigation.BottomScreen
-import ru.spartak.gard.ui.navigation.NavGraph
-import ru.spartak.gard.ui.theme.*
+import ru.spartak.gard.ui.navigation.MainNavGraph
+import ru.spartak.gard.ui.theme.Dark300
+import ru.spartak.gard.ui.theme.GardTheme
+import ru.spartak.gard.ui.theme.White
+import ru.spartak.gard.ui.theme.spacing
 
 @Composable
-fun MainScreen() {
+fun MainScreen(rootNavController: NavController) {
     val navController = rememberNavController()
     val bottomScreens = listOf(
         BottomScreen.HomeScreen,
@@ -35,15 +40,15 @@ fun MainScreen() {
                 )
             }
         ) {
-            NavGraph(
+            MainNavGraph(
                 navController = navController,
                 startDestination = BottomScreen.HomeScreen.route,
-                modifier = Modifier.padding(bottom = it.calculateBottomPadding())
+                rootNavController = rootNavController,
+                modifier = Modifier.statusBarsPadding().padding(bottom = it.calculateBottomPadding())
             )
         }
     }
 }
-
 
 @Composable
 fun BottomBar(
@@ -83,6 +88,7 @@ fun RowScope.AddItem(
                     painter = painterResource(id = bottomScreen.icon),
                     contentDescription = "Navigation Icon",
                     tint = stateColor
+                    //tint = if (selected) White else Dark300
                 )
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraSmall))
                 Text(

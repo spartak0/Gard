@@ -1,9 +1,8 @@
-package ru.spartak.gard.ui.settings_screen
+package ru.spartak.gard.utils
 
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import ru.spartak.gard.utils.Constant
 import java.util.*
 
 object LocaleHelper {
@@ -22,20 +21,20 @@ object LocaleHelper {
 
     private fun updateSharedPreferences(context: Context, language: String) {
         val sharedPreferences = context.getSharedPreferences(
-            Constant.languageSharedPreferences,
+            Constant.LANGUAGE_SHARED_PREFERENCES,
             Context.MODE_PRIVATE
         )
         val editor = sharedPreferences.edit()
-        editor.putString(Constant.language, language)
+        editor.putString(Constant.LANGUAGE, language)
         editor.apply()
     }
 
     fun getLocaleCode(context: Context): String {
         val sharedPreferences = context.getSharedPreferences(
-            Constant.languageSharedPreferences,
+            Constant.LANGUAGE_SHARED_PREFERENCES,
             Context.MODE_PRIVATE
         )
-        return sharedPreferences.getString(Constant.language, "en") ?: "en"
+        return sharedPreferences.getString(Constant.LANGUAGE, "en") ?: "en"
     }
 
     fun getLocaleName(context: Context): String {

@@ -1,6 +1,5 @@
 package ru.spartak.gard.ui.edit_screen
 
-import android.os.Bundle
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,20 +23,24 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.navigation.NavController
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ru.spartak.gard.R
 import ru.spartak.gard.ui.details.BackBtn
 import ru.spartak.gard.ui.details.TopBar
-import ru.spartak.gard.ui.navigation.Screen
-import ru.spartak.gard.ui.navigation.navigate
+import ru.spartak.gard.ui.navigation.RootScreen
 import ru.spartak.gard.ui.theme.*
 
 @Composable
-fun EditScreen(navController: NavController) {
+fun EditScreen(navController: NavController, rootNavController: NavController) {
     GardTheme {
-        Box(modifier = Modifier.fillMaxSize()) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
             Column(
                 Modifier
                     .padding(horizontal = MaterialTheme.spacing.medium)
@@ -89,8 +92,8 @@ fun EditScreen(navController: NavController) {
                                 delay(2000)
                             }
                             tmp.join()
-                            loadState.value=false
-                            navController.navigate(route=Screen.ProfileScreen.route,params= bundleOf("123" to true))
+                            loadState.value = false
+                            rootNavController.navigate(RootScreen.Confirmation.route)
                         }
 
 
@@ -103,7 +106,12 @@ fun EditScreen(navController: NavController) {
 }
 
 @Composable
-fun SaveBtn(modifier: Modifier = Modifier, onClick: () -> Unit, text: String, loadState: MutableState<Boolean>) {
+fun SaveBtn(
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit,
+    text: String,
+    loadState: MutableState<Boolean>
+) {
     Box(modifier = modifier) {
         Box(
             modifier = Modifier

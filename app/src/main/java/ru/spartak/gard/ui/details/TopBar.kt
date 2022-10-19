@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -23,7 +24,7 @@ import ru.spartak.gard.ui.theme.spacing
 @Composable
 fun TopBar(
     subtitleText: String,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     leftView: @Composable (RowScope.() -> Unit)? = null,
     rightView: @Composable (RowScope.() -> Unit)? = null,
 ) {
@@ -48,12 +49,13 @@ fun TopBar(
 }
 
 @Composable
-fun BackBtn(onClick: () -> Unit) {
+fun BackBtn(contentColor:Color=MaterialTheme.colors.primary,onClick: () -> Unit) {
     TopAppBarView(
         icon = painterResource(id = R.drawable.ic_arrow_back),
         text = stringResource(id = R.string.back),
         leftMargin = MaterialTheme.spacing.smallMedium,
-        rightMargin = MaterialTheme.spacing.large
+        rightMargin = MaterialTheme.spacing.large,
+        contentColor = contentColor
     ) {
         onClick()
     }
@@ -72,7 +74,15 @@ fun EditBtn(onClick: () -> Unit) {
 }
 
 @Composable
-fun TopAppBarView(icon: Painter, text: String, modifier: Modifier = Modifier,leftMargin:Dp,rightMargin:Dp, onClick: () -> Unit) {
+fun TopAppBarView(
+    icon: Painter,
+    text: String,
+    modifier: Modifier = Modifier,
+    leftMargin: Dp,
+    rightMargin: Dp,
+    contentColor: Color=MaterialTheme.colors.primary,
+    onClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxHeight()
@@ -86,13 +96,13 @@ fun TopAppBarView(icon: Painter, text: String, modifier: Modifier = Modifier,lef
         Icon(
             painter = icon,
             contentDescription = null,
-            tint = MaterialTheme.colors.primary
+            tint = contentColor
         )
         Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
         Text(
             text = text,
             style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Medium),
-            color = MaterialTheme.colors.primary
+            color = contentColor
         )
         Spacer(modifier = Modifier.width(rightMargin))
     }
