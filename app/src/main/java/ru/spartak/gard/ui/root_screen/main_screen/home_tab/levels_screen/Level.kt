@@ -1,4 +1,4 @@
-package ru.spartak.gard.ui.levels_screen
+package ru.spartak.gard.ui.root_screen.main_screen.home_tab.levels_screen
 
 import ru.spartak.gard.R
 

@@ -1,4 +1,4 @@
-package ru.spartak.gard.ui.notifications_screen
+package ru.spartak.gard.ui.root_screen.main_screen.home_tab.notifications_screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

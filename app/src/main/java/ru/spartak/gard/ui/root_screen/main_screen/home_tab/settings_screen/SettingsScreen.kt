@@ -1,4 +1,4 @@
-package ru.spartak.gard.ui.settings_screen
+package ru.spartak.gard.ui.root_screen.main_screen.home_tab.settings_screen
 
 import android.annotation.SuppressLint
 import android.content.Context

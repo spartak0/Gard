@@ -5,9 +5,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import ru.spartak.gard.ui.confirmation_screen.ConfirmationScreen
-import ru.spartak.gard.ui.level_up_screen.LevelUpScreen
-import ru.spartak.gard.ui.main_screen.MainScreen
+import ru.spartak.gard.ui.root_screen.confirmation_screen.ConfirmationScreen
+import ru.spartak.gard.ui.root_screen.level_up_screen.LevelUpScreen
+import ru.spartak.gard.ui.root_screen.main_screen.MainScreen
 
 @Composable
 fun RootNavGraph(

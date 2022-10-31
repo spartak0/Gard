@@ -1,4 +1,4 @@
-package ru.spartak.gard.ui.profile_screen
+package ru.spartak.gard.ui.root_screen.main_screen.home_tab.profile_screen
 
 import android.os.Handler
 import android.os.Looper

@@ -1,4 +1,4 @@
-package ru.spartak.gard.ui.edit_screen
+package ru.spartak.gard.ui.root_screen.main_screen.home_tab.edit_screen
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background

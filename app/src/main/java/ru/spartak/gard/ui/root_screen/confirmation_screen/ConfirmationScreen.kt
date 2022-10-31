@@ -1,4 +1,4 @@
-package ru.spartak.gard.ui.confirmation_screen
+package ru.spartak.gard.ui.root_screen.confirmation_screen
 
 import android.annotation.SuppressLint
 import android.text.format.DateUtils
@@ -26,7 +26,7 @@ import kotlinx.coroutines.delay
 import ru.spartak.gard.R
 import ru.spartak.gard.ui.details.BackBtn
 import ru.spartak.gard.ui.details.TopBar
-import ru.spartak.gard.ui.edit_screen.OutlinedTextField
+import ru.spartak.gard.ui.root_screen.main_screen.home_tab.edit_screen.OutlinedTextField
 import ru.spartak.gard.ui.theme.GardTheme
 import ru.spartak.gard.ui.theme.Tertiary500
 import ru.spartak.gard.ui.theme.Text50

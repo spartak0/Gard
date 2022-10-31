@@ -8,7 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
-import ru.spartak.gard.ui.main_screen.MainScreen
+import ru.spartak.gard.ui.root_screen.main_screen.MainScreen
 import ru.spartak.gard.ui.root_screen.RootScreen
 import ru.spartak.gard.utils.LocaleHelper
 import ru.spartak.gard.ui.theme.GardTheme

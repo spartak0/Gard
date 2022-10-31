@@ -1,33 +1,26 @@
-package ru.spartak.gard.ui.profile_screen
+package ru.spartak.gard.ui.root_screen.main_screen.home_tab.profile_screen
 
 import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Divider
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.layout
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Dialog
-import androidx.compose.ui.window.DialogProperties
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import kotlinx.coroutines.CoroutineScope
@@ -38,19 +31,20 @@ import ru.spartak.gard.R
 import ru.spartak.gard.ui.details.BackBtn
 import ru.spartak.gard.ui.details.EditBtn
 import ru.spartak.gard.ui.details.TopBar
+import ru.spartak.gard.ui.details.bottomAlign
 import ru.spartak.gard.ui.navigation.Screen
 import ru.spartak.gard.ui.theme.*
 import ru.spartak.gard.utils.Constant
-import kotlin.math.log
 
-@SuppressLint("CoroutineCreationDuringComposition", "RememberReturnType",
+@SuppressLint(
+    "CoroutineCreationDuringComposition", "RememberReturnType",
     "UnrememberedMutableState"
 )
 @Composable
 fun ProfileScreen(
     navController: NavController,
     showSaveToast: Boolean = false,
-    levelOnClick:()->Unit
+    levelOnClick: () -> Unit
 ) {
 
     val visibleToast = remember { mutableStateOf(false) }
@@ -82,7 +76,7 @@ fun ProfileScreen(
                         .fillMaxWidth()
                         .height(45.dp),
                     dismiss = {
-                        visibleSaveToast.value=false
+                        visibleSaveToast.value = false
                         navController.previousBackStackEntry?.arguments?.putAll(bundleOf(Constant.SAVE_TOAST_KEY to false))
                     }
                 )
@@ -106,7 +100,7 @@ fun ProfileScreen(
                         .fillMaxWidth()
                         .height(45.dp),
                     dismiss = {
-                        visibleToast.value=false
+                        visibleToast.value = false
                     }
                 )
             }
@@ -132,108 +126,44 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
             SettingsItem(onClick = { navController.navigate(Screen.SettingsScreen.route) })
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-            LevelItem(onClick = { levelOnClick()})
+            LevelItem(onClick = { levelOnClick() })
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             FAQItem(onClick = {})
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             PoliceItem(onClick = {})
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.mediumLarge))
             LogOutItem(onClick = { visibleDialog.value = true })
-            if (visibleDialog.value) {
-                LogOutDialog(
-                    showDialog = visibleDialog,
-                    modifier = Modifier
-                        .padding(horizontal = MaterialTheme.spacing.medium)
-                        .padding(bottom = 40.dp)
-                        .bottomAlign()
-                        .fillMaxWidth()
-                ) {
-                    //todo log out on click
-                }
+        }
+        if (visibleDialog.value) {
+            LogOutDialog(
+                showDialog = visibleDialog,
+                modifier = Modifier
+                    .bottomAlign()
+                    .padding(bottom = 40.dp)
+                    .padding(horizontal = MaterialTheme.spacing.medium)
+                    .fillMaxWidth()
+            ) {
+                //todo log out on click
             }
-
         }
     }
 }
 
 
-fun Modifier.bottomAlign() = layout { measurable, constraints ->
-    val placeable = measurable.measure(constraints);
-    layout(constraints.maxWidth, constraints.maxHeight) {
-        placeable.place(0, constraints.maxHeight - placeable.height, 10f)
-    }
-}
-
-
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun LogOutDialog(showDialog: MutableState<Boolean>, modifier: Modifier, onClick: () -> Unit) {
-    Dialog(
-        onDismissRequest = { showDialog.value = false },
-        properties = DialogProperties(usePlatformDefaultWidth = false),
-    ) {
-        Column(
-            modifier = modifier
-                .background(MaterialTheme.colors.secondary, RoundedCornerShape(4.dp)),
-            horizontalAlignment = Alignment.End,
-        ) {
-            Text(
-                text = stringResource(R.string.sure_log_out),
-                style = MaterialTheme.typography.subtitle1,
-                modifier = Modifier
-                    .padding(MaterialTheme.spacing.medium)
-                    .fillMaxWidth()
-            )
-            Divider(modifier = Modifier.fillMaxWidth(), color = Muted700, thickness = 1.dp)
-            Text(
-                text = stringResource(R.string.transfered_to_starting),
-                style = MaterialTheme.typography.body2,
-                modifier = Modifier
-                    .padding(MaterialTheme.spacing.medium)
-                    .fillMaxWidth()
-            )
-            Divider(modifier = Modifier.fillMaxWidth(), color = Muted700, thickness = 1.dp)
-            Row(modifier = Modifier.padding(MaterialTheme.spacing.medium)) {
-                Box(
-                    modifier = Modifier
-                        .height(41.dp)
-                        .border(1.dp, Muted700, RoundedCornerShape(4.dp))
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(
-                            color = MaterialTheme.colors.secondary
-                        )
-                        .clickable {
-                            showDialog.value = false
-                        }, contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Cancel",
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(horizontal = MaterialTheme.spacing.smallMedium),
-                        style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Medium)
-                    )
-                }
-                Spacer(modifier = Modifier.width(MaterialTheme.spacing.medium))
-                Box(
-                    modifier = Modifier
-                        .height(41.dp)
-                        .clip(RoundedCornerShape(4.dp))
-                        .background(Error600)
-                        .clickable { onClick() },
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = "Log Out",
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(horizontal = MaterialTheme.spacing.smallMedium),
-                        style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Medium)
-                    )
-                }
-            }
 
-        }
-    }
+        ru.spartak.gard.ui.details.Dialog(
+            subtitle = stringResource(id = R.string.sure_log_out),
+            text = stringResource(id = R.string.transfered_to_starting),
+            confirmText = stringResource(id = R.string.log_out),
+            rejectText = stringResource(id = R.string.cancel),
+            showDialog = showDialog,
+            modifier = modifier,
+            onClick = onClick
+        )
 }
+
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable
@@ -242,7 +172,7 @@ fun Toast(
     backgroundColor: Color,
     text: String,
     modifier: Modifier = Modifier,
-    dismiss:()->Unit,
+    dismiss: () -> Unit,
 ) {
     Row(
         modifier = modifier.background(backgroundColor, RoundedCornerShape(4.dp)),

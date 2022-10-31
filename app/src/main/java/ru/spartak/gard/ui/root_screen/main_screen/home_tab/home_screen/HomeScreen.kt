@@ -1,4 +1,4 @@
-package ru.spartak.gard.ui.home_screen
+package ru.spartak.gard.ui.root_screen.main_screen.home_tab.home_screen
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*

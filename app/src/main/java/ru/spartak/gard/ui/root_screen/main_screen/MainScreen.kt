@@ -1,4 +1,4 @@
-package ru.spartak.gard.ui.main_screen
+package ru.spartak.gard.ui.root_screen.main_screen
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.animateColorAsState

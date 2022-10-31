@@ -8,13 +8,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import ru.spartak.gard.ui.edit_screen.EditScreen
-import ru.spartak.gard.ui.home_screen.HomeScreen
-import ru.spartak.gard.ui.levels_screen.LevelsScreen
-import ru.spartak.gard.ui.notifications_screen.NotificationsScreen
-import ru.spartak.gard.ui.profile_screen.ProfileScreen
-import ru.spartak.gard.ui.settings_screen.SettingsScreen
-import ru.spartak.gard.utils.Constant
+import ru.spartak.gard.ui.navigation.content.gamesContentComposable
+import ru.spartak.gard.ui.root_screen.main_screen.games_tab.games_screen.GamesScreen
+import ru.spartak.gard.ui.root_screen.main_screen.home_tab.home_screen.HomeScreen
 
 @Composable
 fun MainNavGraph(
@@ -32,33 +28,14 @@ fun MainNavGraph(
             HomeScreen(navController = navController)
         }
         composable(route = BottomScreen.GamesScreen.route) {
+            GamesScreen(navController = navController)
         }
         composable(route = BottomScreen.TasksScreen.route) {
         }
         composable(route = BottomScreen.ShopScreen.route) {
         }
-
-        composable(route = Screen.LevelScreen.route) {
-            LevelsScreen(navController = navController)
-        }
-        composable(route = Screen.ProfileScreen.route) {
-            navController.previousBackStackEntry?.arguments?.getBoolean(Constant.SAVE_TOAST_KEY).let {
-                ProfileScreen(
-                    navController = navController,
-                    showSaveToast = it ?: false,
-                    levelOnClick = {rootNavController.navigate(RootScreen.LevelUpScreen.route)}
-                )
-            }
-        }
-        composable(route = Screen.EditScreen.route) {
-            EditScreen(navController = navController, rootNavController = rootNavController)
-        }
-        composable(route = Screen.SettingsScreen.route) {
-            SettingsScreen(navController = navController)
-        }
-        composable(route = Screen.NotificationsScreen.route) {
-            NotificationsScreen(navController = navController)
-        }
+        homeContentComposable(rootNavController = rootNavController, mainNavController = navController)
+        gamesContentComposable(rootNavController = rootNavController, mainNavController = navController)
     }
 }
 
@@ -70,14 +47,4 @@ fun NavController.navigate(
 ) {
     this.currentBackStackEntry?.arguments?.putAll(params)
     navigate(route, builder)
-}
-
-fun NavController.navigateUp(
-    params: Bundle?,
-) {
-    this.currentBackStackEntry?.arguments?.putAll(params)
-    val a =this.currentBackStackEntry?.destination?.route
-    if (a != null) {
-        popBackStack(route = a, inclusive = true)
-    }
 }

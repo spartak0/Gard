@@ -1,4 +1,4 @@
-package ru.spartak.gard.ui.level_up_screen
+package ru.spartak.gard.ui.root_screen.level_up_screen
 
 import android.app.Activity
 import androidx.compose.foundation.Image
