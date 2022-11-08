@@ -1,12 +1,18 @@
 package ru.spartak.gard.ui.root_screen.main_screen.games_tab.games_screen
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,6 +25,9 @@ import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import ru.spartak.gard.R
+import ru.spartak.gard.ui.details.Border
+import ru.spartak.gard.ui.details.CustomTextField
+import ru.spartak.gard.ui.details.border
 import ru.spartak.gard.ui.navigation.Screen
 import ru.spartak.gard.ui.navigation.navigate
 import ru.spartak.gard.ui.theme.*
@@ -26,6 +35,8 @@ import ru.spartak.gard.utils.Constant
 
 @Composable
 fun GamesScreen(navController: NavController) {
+    val suggestGameVisible = remember { mutableStateOf(true) }
+    val suggestGameText = remember { mutableStateOf("") }
     GardTheme {
         Column(
             Modifier
@@ -45,7 +56,12 @@ fun GamesScreen(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(332.dp),
-                onClick = {navController.navigate(Screen.DetailScreen.route, bundleOf(Constant.GAME_STATUS_KEY to ConnectionStatus.CONNECTED))}
+                onClick = {
+                    navController.navigate(
+                        Screen.DetailScreen.route,
+                        bundleOf(Constant.GAME_STATUS_KEY to ConnectionStatus.CONNECTED)
+                    )
+                }
             )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
             GameCard(
@@ -56,7 +72,12 @@ fun GamesScreen(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(332.dp),
-                onClick = {navController.navigate(Screen.DetailScreen.route, bundleOf(Constant.GAME_STATUS_KEY to ConnectionStatus.DISCONNECTED))}
+                onClick = {
+                    navController.navigate(
+                        Screen.DetailScreen.route,
+                        bundleOf(Constant.GAME_STATUS_KEY to ConnectionStatus.DISCONNECTED)
+                    )
+                }
             )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
             GameCard(
@@ -67,9 +88,108 @@ fun GamesScreen(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(332.dp),
-                onClick = {navController.navigate(Screen.DetailScreen.route, bundleOf(Constant.GAME_STATUS_KEY to ConnectionStatus.SOON))}
+                onClick = {
+                    navController.navigate(
+                        Screen.DetailScreen.route,
+                        bundleOf(Constant.GAME_STATUS_KEY to ConnectionStatus.SOON)
+                    )
+                }
+            )
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
+            AnimatedVisibility(visible = suggestGameVisible.value) {
+                SuggestGameView(modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = MaterialTheme.spacing.mediumLarge),
+                    close = { suggestGameVisible.value = false })
+            }
+            SuggestGameTextField(
+                text = suggestGameText, modifier = Modifier
+                    .fillMaxWidth()
+                    .height(40.dp)
+            )
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+            ProceedBtn(modifier = Modifier
+                .fillMaxWidth()
+                .height(41.dp), onClick = {})
+            Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge))
+        }
+    }
+}
+
+@Composable
+fun ProceedBtn(modifier: Modifier, onClick: () -> Unit) {
+    Surface(
+        modifier = modifier
+            .clip(RoundedCornerShape(4.dp))
+            .clickable { onClick() }) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colors.primary),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "Proceed",
+                style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Medium)
             )
         }
+    }
+}
+
+@Composable
+fun SuggestGameTextField(text: MutableState<String>, modifier: Modifier) {
+    CustomTextField(
+        value = text.value,
+        onValueChange = { text.value = it },
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(40.dp)
+    )
+
+}
+
+@Composable
+fun SuggestGameView(modifier: Modifier, close: () -> Unit) {
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(4.dp))
+            .border(start = Border(4.dp, Tertiary500))
+            .padding(
+                vertical = MaterialTheme.spacing.small,
+                horizontal = MaterialTheme.spacing.medium
+            )
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.Top
+        ) {
+            Text(
+                text = "There’s no your game in this list?",
+                modifier = Modifier.width(240.dp),
+                style = MaterialTheme.typography.h5
+            )
+            Box(
+                Modifier
+                    .clip(CircleShape)
+                    .clickable { close() },
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_close),
+                    contentDescription = null,
+                    tint = Dark500,
+                    modifier = Modifier.padding(MaterialTheme.spacing.smallMedium)
+                )
+            }
+        }
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
+        Text(
+            text = "Type your game below, and we try our best to add it to our supported list!",
+            modifier = Modifier.width(240.dp),
+            style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Normal)
+        )
+
+
     }
 }
 
@@ -85,7 +205,7 @@ fun GameCard(
     imageId: Int,
     connectionStatus: ConnectionStatus,
     modifier: Modifier,
-    onClick:()->Unit
+    onClick: () -> Unit
 ) {
     Column(
         modifier = modifier

@@ -30,6 +30,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.spartak.gard.R
 import ru.spartak.gard.ui.details.BackBtn
+import ru.spartak.gard.ui.details.CustomTextField
 import ru.spartak.gard.ui.details.TopBar
 import ru.spartak.gard.ui.navigation.RootScreen
 import ru.spartak.gard.ui.theme.*
@@ -56,7 +57,10 @@ fun EditScreen(navController: NavController, rootNavController: NavController) {
                 NicknameTextField(
                     value = nickname.value,
                     onValueChange = { nickname.value = it },
-                    placeholder = "Nagib"
+                    placeholder = "Nagib",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(40.dp)
                 )
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
                 SubtitleEmail()
@@ -64,7 +68,10 @@ fun EditScreen(navController: NavController, rootNavController: NavController) {
                 EmailTextField(
                     value = email.value,
                     onValueChange = { email.value = it },
-                    placeholder = "123@mail.ru"
+                    placeholder = "123@mail.ru",
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(40.dp)
                 )
             }
             Column(
@@ -171,33 +178,32 @@ fun SubtitleNickname() {
 }
 
 @Composable
-fun EmailTextField(value: String, onValueChange: (String) -> Unit, placeholder: String) {
-    NicknameTextField(value = value, onValueChange = onValueChange, placeholder = placeholder)
-}
-
-@Composable
-fun NicknameTextField(value: String, onValueChange: (String) -> Unit, placeholder: String) {
-    MyTextField(value = value, onValueChange = onValueChange, placeholder = placeholder)
-}
-
-@Composable
-fun MyTextField(value: String, onValueChange: (String) -> Unit, placeholder: String) {
-    OutlinedTextField(
-        value = value,
-        onValueChange = onValueChange,
-        placeholderText = placeholder,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(40.dp),
-        colors = TextFieldDefaults.outlinedTextFieldColors(
-            textColor = Text50,
-            disabledTextColor = Text50,
-            placeholderColor = Text500,
-            disabledPlaceholderColor = Text500
-        ),
-        cursorColor = SolidColor(Text50)
+fun EmailTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholder: String,
+    modifier: Modifier
+) {
+    CustomTextField(
+        value = value, onValueChange = onValueChange, placeholder = placeholder, modifier = modifier
     )
 }
+
+@Composable
+fun NicknameTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    placeholder: String,
+    modifier: Modifier
+) {
+    CustomTextField(
+        value = value,
+        onValueChange = onValueChange,
+        placeholder = placeholder,
+        modifier = modifier
+    )
+}
+
 
 @OptIn(ExperimentalMaterialApi::class)
 @Composable

@@ -1,4 +1,4 @@
-package ru.spartak.gard.ui.root_screen.main_screen.games_tab.detail_screen
+package ru.spartak.gard.ui.root_screen.main_screen.games_tab.detail_screen.information_tab
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
@@ -26,7 +26,7 @@ import ru.spartak.gard.ui.theme.*
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun InformationScreen(connectionStatus: ConnectionStatus) {
+fun InformationTab(connectionStatus: ConnectionStatus) {
     val tmp = listOf(
         painterResource(id = R.drawable.fortnite_image_tmp),
         painterResource(id = R.drawable.fortnite_image_tmp),
@@ -98,7 +98,7 @@ fun InformationScreen(connectionStatus: ConnectionStatus) {
                             .fillMaxWidth()
                             .height(41.dp)
                     ) {
-                        showDialog.value=true
+                        showDialog.value = true
                     }
                 }
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge))
@@ -137,7 +137,7 @@ fun DisconnectGameDialog(modifier: Modifier, showDialog: MutableState<Boolean>) 
         text = "Your statistics will be reseted as well.",
         confirmText = "Disconnect",
         rejectText = "Cancel",
-        showDialog =showDialog,
+        showDialog = showDialog,
         modifier = modifier
     ) {
 
