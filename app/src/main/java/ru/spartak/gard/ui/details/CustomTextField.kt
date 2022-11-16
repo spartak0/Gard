@@ -1,8 +1,11 @@
 package ru.spartak.gard.ui.details
 
+import androidx.compose.material.ContentAlpha
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import ru.spartak.gard.ui.root_screen.main_screen.home_tab.edit_screen.OutlinedTextField
 import ru.spartak.gard.ui.theme.Text50
@@ -13,7 +16,10 @@ fun CustomTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier,
-    placeholder: String = ""
+    placeholder: String = "",
+    placeholderColor: Color = Text500,
+    borderColor: Color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.disabled),
+    cursorColor: Color = Text50
 ) {
     OutlinedTextField(
         value = value,
@@ -23,9 +29,12 @@ fun CustomTextField(
         colors = TextFieldDefaults.outlinedTextFieldColors(
             textColor = Text50,
             disabledTextColor = Text50,
-            placeholderColor = Text500,
-            disabledPlaceholderColor = Text500
+            placeholderColor = placeholderColor,
+            disabledPlaceholderColor = placeholderColor,
+            unfocusedBorderColor = borderColor,
+            disabledBorderColor = borderColor,
+            errorBorderColor = MaterialTheme.colors.error
         ),
-        cursorColor = SolidColor(Text50)
+        cursorColor = SolidColor(cursorColor)
     )
 }

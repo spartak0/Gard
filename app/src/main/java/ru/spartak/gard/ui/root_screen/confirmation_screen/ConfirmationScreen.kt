@@ -21,16 +21,21 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import kotlinx.coroutines.delay
 import ru.spartak.gard.R
 import ru.spartak.gard.ui.details.BackBtn
 import ru.spartak.gard.ui.details.TopBar
+import ru.spartak.gard.ui.navigation.Graphs
+import ru.spartak.gard.ui.navigation.Screen
+import ru.spartak.gard.ui.navigation.navigate
 import ru.spartak.gard.ui.root_screen.main_screen.home_tab.edit_screen.OutlinedTextField
 import ru.spartak.gard.ui.theme.GardTheme
 import ru.spartak.gard.ui.theme.Tertiary500
 import ru.spartak.gard.ui.theme.Text50
 import ru.spartak.gard.ui.theme.spacing
+import ru.spartak.gard.utils.Constant
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
@@ -56,10 +61,20 @@ fun ConfirmationScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.mediumLarge))
             CodeTextField(
                 text = text,
+                code = "1234",
                 modifier = Modifier
                     .padding(horizontal = MaterialTheme.spacing.medium)
                     .fillMaxWidth()
-                    .height(40.dp)
+                    .height(40.dp),
+                onSuccess = {
+                    navController.navigate(
+                        Graphs.Main,
+                        bundleOf(
+                            Constant.MAIN_GRAPH_START_DESTINATION to Screen.ProfileScreen.route,
+                            Constant.SAVE_TOAST_KEY to true
+                        )
+                    )
+                }
             )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
             SendAgainBtn(
@@ -103,10 +118,18 @@ fun SendAgainBtn(modifier: Modifier, onClick: () -> Unit) {
 }
 
 @Composable
-fun CodeTextField(text: MutableState<String>, modifier: Modifier) {
+fun CodeTextField(
+    text: MutableState<String>,
+    code: String,
+    onSuccess: () -> Unit,
+    modifier: Modifier
+) {
     OutlinedTextField(
         value = text.value,
-        onValueChange = { text.value = it },
+        onValueChange = {
+            text.value = it
+            if (text.value == code) onSuccess()
+        },
         modifier = modifier
             .border(
                 width = 2.dp,
@@ -139,8 +162,9 @@ fun SubtitleConfirmation() {
 @Composable
 fun ConfirmationTopBar(backOnClick: () -> Unit) {
     TopBar(
-        subtitleText = stringResource(id = R.string.edit),
+        subtitleText = stringResource(R.string.confirmation),
         modifier = Modifier
+            .padding(horizontal = MaterialTheme.spacing.medium)
             .fillMaxWidth()
             .height(41.dp),
         leftView = { BackBtn { backOnClick() } },

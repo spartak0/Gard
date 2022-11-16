@@ -1,6 +1,5 @@
 package ru.spartak.gard.ui.root_screen.main_screen
 
-import android.annotation.SuppressLint
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.*
@@ -21,9 +20,16 @@ import ru.spartak.gard.ui.theme.Dark300
 import ru.spartak.gard.ui.theme.GardTheme
 import ru.spartak.gard.ui.theme.White
 import ru.spartak.gard.ui.theme.spacing
+import ru.spartak.gard.utils.Constant
 
 @Composable
-fun MainScreen(rootNavController: NavController) {
+fun MainScreen(
+    rootNavController: NavController,
+    startDestination: String = rootNavController.previousBackStackEntry?.arguments?.getString(
+        Constant.MAIN_GRAPH_START_DESTINATION
+    )
+        ?: BottomScreen.HomeScreen.route
+) {
     val navController = rememberNavController()
     val bottomScreens = listOf(
         BottomScreen.HomeScreen,
@@ -42,9 +48,11 @@ fun MainScreen(rootNavController: NavController) {
         ) {
             MainNavGraph(
                 navController = navController,
-                startDestination = BottomScreen.HomeScreen.route,
+                startDestination = startDestination,
                 rootNavController = rootNavController,
-                modifier = Modifier.statusBarsPadding().padding(bottom = it.calculateBottomPadding())
+                modifier = Modifier
+                    .statusBarsPadding()
+                    .padding(bottom = it.calculateBottomPadding())
             )
         }
     }

@@ -45,6 +45,13 @@ import ru.spartak.gard.utils.LocaleHelper
 
 @Composable
 fun SettingsScreen(navController: NavController) {
+    val checkNotify = remember { mutableStateOf(false) }
+    val checkContacts = remember { mutableStateOf(false) }
+    val checkMicrophone = remember { mutableStateOf(false) }
+    val checkLocation = remember { mutableStateOf(false) }
+    val checkMedia = remember { mutableStateOf(false) }
+    val showLanguageDialog = remember { mutableStateOf(false) }
+
     GardTheme {
         Column(
             modifier = Modifier
@@ -61,14 +68,11 @@ fun SettingsScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.mediumLarge))
             SubtitleGeneral()
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-            val showDialog = remember {
-                mutableStateOf(false)
-            }
             ChangeLanguageView(context = LocalContext.current, onClick = {
-                showDialog.value = true
+                showLanguageDialog.value = true
             })
-            if (showDialog.value) SelectLanguageDialog(
-                showDialog = showDialog,
+            if (showLanguageDialog.value) SelectLanguageDialog(
+                showDialog = showLanguageDialog,
                 context = LocalContext.current,
                 modifier = Modifier
                     .padding(all = MaterialTheme.spacing.medium)
@@ -78,11 +82,6 @@ fun SettingsScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
             SubtitleNotifications()
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-            val checkNotify = remember { mutableStateOf(false) }
-            val checkContacts = remember { mutableStateOf(false) }
-            val checkMicrophone = remember { mutableStateOf(false) }
-            val checkLocation = remember { mutableStateOf(false) }
-            val checkMedia = remember { mutableStateOf(false) }
             SwitchSettingsItem(text = "Allow GARD notify you", checkState = checkNotify)
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
             SubtitleControls()

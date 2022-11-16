@@ -17,6 +17,13 @@ import ru.spartak.gard.ui.root_screen.main_screen.games_tab.detail_screen.stats_
 import ru.spartak.gard.ui.theme.Text50
 import ru.spartak.gard.ui.theme.Text500
 
+
+sealed class StatsTabItem(val title: String, val content: @Composable () -> Unit) {
+    object Solo : StatsTabItem(title = "Solo", content = { SoloFragment() })
+    object Duos : StatsTabItem(title = "Duos", content = { DuosFragment() })
+    object Squads : StatsTabItem(title = "Squads", content = { SquadsFragment() })
+}
+
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun StatsViewPagerTabs(tabs: List<StatsTabItem>, pagerState: PagerState, modifier: Modifier) {
@@ -63,10 +70,4 @@ fun StatsTabsContent(tabs: List<StatsTabItem>, pagerState: PagerState, modifier:
     ) { page ->
         tabs[page].content()
     }
-}
-
-sealed class StatsTabItem(val title: String, val content: @Composable () -> Unit) {
-    object Solo : StatsTabItem(title = "Solo", content = { SoloFragment() })
-    object Duos : StatsTabItem(title = "Duos", content = { DuosFragment() })
-    object Squads : StatsTabItem(title = "Squads", content = { SquadsFragment() })
 }

@@ -99,7 +99,7 @@ fun HomeScreen(navController: NavController) {
                 EarningsCard(
                     subtitle = "MultiKill 30",
                     text = "Fortnite daily reward",
-                    iconId = R.drawable.fortnite_logo_natification_false,
+                    iconId = R.drawable.fortnite_logo,
                     pts = 12
                 )
                 Spacer(modifier = Modifier.height(12.dp))
@@ -111,7 +111,7 @@ fun HomeScreen(navController: NavController) {
                 EarningsCard(
                     subtitle = "MultiKill 15",
                     text = "Apex daily reward",
-                    iconId = R.drawable.fortnite_logo_natification_false,
+                    iconId = R.drawable.fortnite_logo,
                     pts = 16
                 )
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.smallMedium))
@@ -151,9 +151,10 @@ fun EarningsCard(subtitle: String, text: String, iconId: Int, pts: Int) {
                 Image(
                     painter = painterResource(id = iconId),
                     contentDescription = null,
-                    modifier = Modifier.size(48.dp),
+                    modifier = Modifier.size(48.dp).padding(MaterialTheme.spacing.small),
                     contentScale = ContentScale.Fit
                 )
+                Spacer(modifier = Modifier.width(MaterialTheme.spacing.smallMedium))
                 Column {
                     Text(
                         text = subtitle,

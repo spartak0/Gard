@@ -16,6 +16,8 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.navArgument
 import com.google.accompanist.pager.*
 import ru.spartak.gard.R
 import ru.spartak.gard.ui.details.Dialog
@@ -26,7 +28,7 @@ import ru.spartak.gard.ui.theme.*
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun InformationTab(connectionStatus: ConnectionStatus) {
+fun InformationTab(connectionStatus: ConnectionStatus,navController: NavController) {
     val tmp = listOf(
         painterResource(id = R.drawable.fortnite_image_tmp),
         painterResource(id = R.drawable.fortnite_image_tmp),
@@ -113,7 +115,8 @@ fun InformationTab(connectionStatus: ConnectionStatus) {
                     status = connectionStatus, modifier = Modifier
                         .padding(MaterialTheme.spacing.medium)
                         .fillMaxWidth()
-                        .height(40.dp)
+                        .height(40.dp),
+                    navController = navController
                 )
                 Divider(modifier = Modifier.fillMaxWidth(), thickness = 1.dp, color = Dark200)
             }
@@ -156,10 +159,10 @@ fun DisconnectTextBtn(modifier: Modifier, onClick: () -> Unit) {
 }
 
 @Composable
-fun LowerActionBtn(status: ConnectionStatus, modifier: Modifier) {
+fun LowerActionBtn(status: ConnectionStatus, modifier: Modifier,navController: NavController) {
     when (status) {
         ConnectionStatus.CONNECTED -> ConnectedActionBtn(modifier = modifier) {}
-        ConnectionStatus.DISCONNECTED -> DisconnectedActionBtn(modifier = modifier) {}
+        ConnectionStatus.DISCONNECTED -> DisconnectedActionBtn(text= "Connect",modifier = modifier) {}
         ConnectionStatus.SOON -> {}
     }
 
@@ -196,7 +199,7 @@ fun ConnectedActionBtn(modifier: Modifier, onClick: () -> Unit) {
 }
 
 @Composable
-fun DisconnectedActionBtn(modifier: Modifier, onClick: () -> Unit) {
+fun DisconnectedActionBtn(text: String, modifier:Modifier, onClick: () -> Unit) {
     Surface(
         color = MaterialTheme.colors.primary,
         modifier = modifier
@@ -218,7 +221,7 @@ fun DisconnectedActionBtn(modifier: Modifier, onClick: () -> Unit) {
             )
             Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
             Text(
-                text = "Connect",
+                text = text,
                 style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Medium)
             )
         }

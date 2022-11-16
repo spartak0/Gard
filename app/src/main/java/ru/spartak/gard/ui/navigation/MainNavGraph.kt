@@ -9,6 +9,7 @@ import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import ru.spartak.gard.ui.navigation.content.gamesContentComposable
+import ru.spartak.gard.ui.navigation.content.homeContentComposable
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.games_screen.GamesScreen
 import ru.spartak.gard.ui.root_screen.main_screen.home_tab.home_screen.HomeScreen
 

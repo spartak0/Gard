@@ -1,7 +1,5 @@
 package ru.spartak.gard.ui.root_screen.main_screen.home_tab.profile_screen
 
-import android.os.Handler
-import android.os.Looper
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -27,16 +25,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.os.HandlerCompat.postDelayed
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import ru.spartak.gard.R
 import ru.spartak.gard.ui.theme.*
 
 @Composable
-fun RefferalsCard(refferalCode: String, toastVisibleState:MutableState<Boolean>) {
+fun RefferalsCard(refferalCode: String, toastCopiedState:MutableState<Boolean>) {
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     Surface(
         modifier = Modifier
@@ -68,7 +61,7 @@ fun RefferalsCard(refferalCode: String, toastVisibleState:MutableState<Boolean>)
                     .fillMaxHeight()
                     .width(120.dp), onClick = {
                     clipboardManager.setText(AnnotatedString(refferalCode))
-                    toastVisibleState.value=true
+                    toastCopiedState.value=true
                 })
             }
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))

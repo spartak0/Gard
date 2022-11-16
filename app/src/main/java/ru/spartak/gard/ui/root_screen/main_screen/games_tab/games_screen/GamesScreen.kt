@@ -56,10 +56,22 @@ fun GamesScreen(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(332.dp),
-                onClick = {
+                onClickContainer = {
                     navController.navigate(
                         Screen.DetailScreen.route,
-                        bundleOf(Constant.GAME_STATUS_KEY to ConnectionStatus.CONNECTED)
+                        bundleOf(
+                            Constant.GAME_STATUS_KEY to ConnectionStatus.CONNECTED,
+                            Constant.START_VIEW_PAGER_TAB to 0
+                        )
+                    )
+                },
+                onClickBtn = {
+                    navController.navigate(
+                        Screen.DetailScreen.route,
+                        bundleOf(
+                            Constant.GAME_STATUS_KEY to ConnectionStatus.CONNECTED,
+                            Constant.START_VIEW_PAGER_TAB to 1
+                        )
                     )
                 }
             )
@@ -72,11 +84,17 @@ fun GamesScreen(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(332.dp),
-                onClick = {
+                onClickContainer = {
                     navController.navigate(
                         Screen.DetailScreen.route,
-                        bundleOf(Constant.GAME_STATUS_KEY to ConnectionStatus.DISCONNECTED)
+                        bundleOf(
+                            Constant.GAME_STATUS_KEY to ConnectionStatus.DISCONNECTED,
+                            Constant.START_VIEW_PAGER_TAB to 0
+                        )
                     )
+                },
+                onClickBtn = {
+                    navController.navigate(Screen.ConnectGame.route)
                 }
             )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
@@ -88,12 +106,9 @@ fun GamesScreen(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(332.dp),
-                onClick = {
-                    navController.navigate(
-                        Screen.DetailScreen.route,
-                        bundleOf(Constant.GAME_STATUS_KEY to ConnectionStatus.SOON)
-                    )
-                }
+                onClickContainer = {
+                },
+                onClickBtn = { }
             )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
             AnimatedVisibility(visible = suggestGameVisible.value) {
@@ -205,50 +220,63 @@ fun GameCard(
     imageId: Int,
     connectionStatus: ConnectionStatus,
     modifier: Modifier,
-    onClick: () -> Unit
+    onClickContainer: () -> Unit,
+    onClickBtn: () -> Unit,
 ) {
     Column(
         modifier = modifier
             .clip(RoundedCornerShape(4.dp))
             .background(Dark100)
-            .clickable { onClick() }
     ) {
-        ImageGameCard(painterResource(id = imageId), connectionStatus)
-        Row(
-            modifier = Modifier
-                .padding(
-                    horizontal = MaterialTheme.spacing.medium,
-                    vertical = MaterialTheme.spacing.mediumLarge
-                )
-                .fillMaxWidth()
-                .weight(1f),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Column {
-                Text(text = name, style = MaterialTheme.typography.h6)
-                Text(
-                    text = company,
-                    style = MaterialTheme.typography.caption.copy(fontWeight = FontWeight.Normal)
-                )
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .weight(1f)
+            .clickable { onClickContainer() }) {
+            ImageGameCard(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(200.dp),
+                painterResource(id = imageId), connectionStatus
+            )
+            Row(
+                modifier = Modifier
+                    .padding(
+                        horizontal = MaterialTheme.spacing.medium,
+                        vertical = MaterialTheme.spacing.mediumLarge
+                    )
+                    .fillMaxWidth()
+                    .weight(1f),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column {
+                    Text(text = name, style = MaterialTheme.typography.h6)
+                    Text(
+                        text = company,
+                        style = MaterialTheme.typography.caption.copy(fontWeight = FontWeight.Normal)
+                    )
+                }
+                StatusGameView(connectionStatus)
             }
-            StatusGameView(connectionStatus)
         }
         BtmBtnStatusGameView(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(41.dp), connectionStatus
-        )
+                .height(41.dp),
+            connectionStatus
+        ) { onClickBtn() }
 
 
     }
 }
 
 @Composable
-fun ImageGameCard(painterResource: Painter, connectionStatus: ConnectionStatus) {
+fun ImageGameCard(
+    modifier: Modifier,
+    painterResource: Painter,
+    connectionStatus: ConnectionStatus
+) {
     Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(200.dp),
+        modifier = modifier,
         contentAlignment = Alignment.Center
     ) {
         Image(
@@ -267,11 +295,17 @@ fun ImageGameCard(painterResource: Painter, connectionStatus: ConnectionStatus) 
 }
 
 @Composable
-fun BtmBtnStatusGameView(modifier: Modifier, connectionStatus: ConnectionStatus) {
+fun BtmBtnStatusGameView(
+    modifier: Modifier,
+    connectionStatus: ConnectionStatus,
+    onClick: () -> Unit
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
-        modifier = modifier.background(MaterialTheme.colors.primary)
+        modifier = modifier
+            .background(MaterialTheme.colors.primary)
+            .clickable { onClick() }
     ) {
         when (connectionStatus) {
             ConnectionStatus.CONNECTED -> {

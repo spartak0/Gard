@@ -1,8 +1,6 @@
 package ru.spartak.gard.ui.root_screen.main_screen.home_tab.edit_screen
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -14,11 +12,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
@@ -31,6 +28,7 @@ import kotlinx.coroutines.launch
 import ru.spartak.gard.R
 import ru.spartak.gard.ui.details.BackBtn
 import ru.spartak.gard.ui.details.CustomTextField
+import ru.spartak.gard.ui.details.LoadBtn
 import ru.spartak.gard.ui.details.TopBar
 import ru.spartak.gard.ui.navigation.RootScreen
 import ru.spartak.gard.ui.theme.*
@@ -85,7 +83,6 @@ fun EditScreen(navController: NavController, rootNavController: NavController) {
                     mutableStateOf(false)
                 }
                 SaveBtn(
-                    text = stringResource(R.string.save),
                     modifier = Modifier
                         .padding(MaterialTheme.spacing.medium)
                         .fillMaxWidth()
@@ -116,47 +113,14 @@ fun EditScreen(navController: NavController, rootNavController: NavController) {
 fun SaveBtn(
     modifier: Modifier = Modifier,
     onClick: () -> Unit,
-    text: String,
     loadState: MutableState<Boolean>
 ) {
-    Box(modifier = modifier) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(
-                    MaterialTheme.colors.primary,
-                    RoundedCornerShape(4.dp)
-                )
-                .clickable {
-                    onClick()
-                },
-            contentAlignment = Alignment.Center,
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Text(
-                    text = text,
-                    style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Medium)
-                )
-                AnimatedVisibility(visible = loadState.value) {
-                    Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
-                    CircularProgressIndicator(
-                        modifier = Modifier
-                            .padding(start = MaterialTheme.spacing.extraSmall)
-                            .size(20.dp),
-                        strokeWidth = 2.dp,
-                        color = Text50
-                    )
-                }
-            }
-        }
-        if (loadState.value) Surface(
-            modifier = Modifier
-                .fillMaxSize()
-                .clip(RoundedCornerShape(4.dp))
-                .alpha(0.5f), color = Color.Black
-        ) {
-        }
-    }
+    LoadBtn(
+        onClick = onClick,
+        text = stringResource(id = R.string.save),
+        loadState = loadState.value,
+        modifier = modifier
+    )
 }
 
 @Composable

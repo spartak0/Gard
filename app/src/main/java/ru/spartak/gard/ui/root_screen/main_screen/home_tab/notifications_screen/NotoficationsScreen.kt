@@ -45,7 +45,7 @@ fun NotificationsScreen(navController: NavController) {
                 (0..2).forEach { _ ->
                     NotificationItem(
                         modifier = Modifier.fillMaxWidth(),
-                        iconId = R.drawable.fortnite_logo_natification_false,
+                        iconId = R.drawable.fortnite_logo,
                         enabled = true,
                         subtitle = "Congratulations with your first task!",
                         text = "Good job! This time we give you a bonus 40 points. Keep your tempo!"
@@ -55,7 +55,7 @@ fun NotificationsScreen(navController: NavController) {
                 (0..1).forEach { _ ->
                     NotificationItem(
                         modifier = Modifier.fillMaxWidth(),
-                        iconId = R.drawable.fortnite_logo_natification_false,
+                        iconId = R.drawable.fortnite_logo,
                         enabled = false,
                         subtitle = "You’ve reached the tier 1!!",
                         text = "Congratulations on your achievement! Keep completing tasks and earn points faster with each level!"
