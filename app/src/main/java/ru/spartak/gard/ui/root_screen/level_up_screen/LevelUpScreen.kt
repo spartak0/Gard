@@ -32,6 +32,7 @@ import ru.spartak.gard.ui.theme.GardTheme
 import ru.spartak.gard.ui.theme.Success500
 import ru.spartak.gard.ui.theme.Text50
 import ru.spartak.gard.ui.theme.spacing
+import ru.spartak.gard.utils.StatusBarHeight
 
 @Composable
 fun LevelUpScreen(navController: NavController) {
@@ -52,7 +53,7 @@ fun LevelUpScreen(navController: NavController) {
                 )
         ) {
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                Spacer(modifier = Modifier.height(38.dp+MaterialTheme.spacing.small))
+                Spacer(modifier = Modifier.height(StatusBarHeight.calculate()+MaterialTheme.spacing.small))
                 LevelUpTopBar(
                     modifier = Modifier
                         .padding(horizontal = MaterialTheme.spacing.medium)

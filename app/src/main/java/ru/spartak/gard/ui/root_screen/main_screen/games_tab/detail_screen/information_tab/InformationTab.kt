@@ -17,18 +17,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import androidx.navigation.navArgument
 import com.google.accompanist.pager.*
 import ru.spartak.gard.R
 import ru.spartak.gard.ui.details.Dialog
 import ru.spartak.gard.ui.details.bottomAlign
+import ru.spartak.gard.ui.navigation.Screen
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.games_screen.ConnectionStatus
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.games_screen.StatusGameView
 import ru.spartak.gard.ui.theme.*
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun InformationTab(connectionStatus: ConnectionStatus,navController: NavController) {
+fun InformationTab(connectionStatus: ConnectionStatus, navController: NavController) {
     val tmp = listOf(
         painterResource(id = R.drawable.fortnite_image_tmp),
         painterResource(id = R.drawable.fortnite_image_tmp),
@@ -159,10 +159,18 @@ fun DisconnectTextBtn(modifier: Modifier, onClick: () -> Unit) {
 }
 
 @Composable
-fun LowerActionBtn(status: ConnectionStatus, modifier: Modifier,navController: NavController) {
+fun LowerActionBtn(status: ConnectionStatus, modifier: Modifier, navController: NavController) {
     when (status) {
-        ConnectionStatus.CONNECTED -> ConnectedActionBtn(modifier = modifier) {}
-        ConnectionStatus.DISCONNECTED -> DisconnectedActionBtn(text= "Connect",modifier = modifier) {}
+        ConnectionStatus.CONNECTED -> ConnectedActionBtn(modifier = modifier) {
+        }
+        ConnectionStatus.DISCONNECTED -> DisconnectedActionBtn(
+            text = "Connect",
+            modifier = modifier
+        ) {
+            navController.navigate(
+                Screen.ConnectGame.route
+            )
+        }
         ConnectionStatus.SOON -> {}
     }
 
@@ -199,7 +207,7 @@ fun ConnectedActionBtn(modifier: Modifier, onClick: () -> Unit) {
 }
 
 @Composable
-fun DisconnectedActionBtn(text: String, modifier:Modifier, onClick: () -> Unit) {
+fun DisconnectedActionBtn(text: String, modifier: Modifier, onClick: () -> Unit) {
     Surface(
         color = MaterialTheme.colors.primary,
         modifier = modifier

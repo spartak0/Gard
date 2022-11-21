@@ -21,13 +21,15 @@ fun NavGraphBuilder.gamesContentComposable(
     composable(route = Screen.DetailScreen.route) {
         mainNavController.currentBackStackEntry?.let { backStackEntry ->
             val viewModel = hiltViewModel<DetailsViewModel>(backStackEntry)
-            mainNavController.previousBackStackEntry?.arguments?.let {
-                val connectionStatus = it.getSerializable(Constant.GAME_STATUS_KEY)?: ConnectionStatus.DISCONNECTED
-                val startViewPagerTab = it.getInt(Constant.START_VIEW_PAGER_TAB)?:0
+            mainNavController.previousBackStackEntry?.arguments.let {
+                val connectionStatus = it?.getSerializable(Constant.GAME_STATUS_KEY)?: ConnectionStatus.DISCONNECTED
+                val startViewPagerTab = it?.getInt(Constant.START_VIEW_PAGER_TAB)?:0
+                val errorToastState = it?.getBoolean(Constant.ERROR_TOAST_KEY)?:false
                 DetailsScreen(
                     navController = mainNavController,
                     connectionStatus = connectionStatus as ConnectionStatus,
                     startViewPagerTab= startViewPagerTab,
+                    errorToastState = errorToastState,
                     viewModel = viewModel,
                 )
             }

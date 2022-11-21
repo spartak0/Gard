@@ -49,13 +49,16 @@ fun TopBar(
 }
 
 @Composable
-fun BackBtn(contentColor:Color=MaterialTheme.colors.primary,onClick: () -> Unit) {
+fun BackBtn(contentColor: Color = MaterialTheme.colors.primary, onClick: () -> Unit) {
     TopAppBarView(
         icon = painterResource(id = R.drawable.ic_arrow_back),
         text = stringResource(id = R.string.back),
         leftMargin = MaterialTheme.spacing.smallMedium,
         rightMargin = MaterialTheme.spacing.large,
-        contentColor = contentColor
+        contentColor = contentColor,
+        modifier = Modifier
+            .fillMaxHeight()
+            .clip(RoundedCornerShape(4.dp))
     ) {
         onClick()
     }
@@ -67,7 +70,10 @@ fun EditBtn(onClick: () -> Unit) {
         icon = painterResource(id = R.drawable.ic_edit),
         text = stringResource(R.string.edit),
         leftMargin = MaterialTheme.spacing.large,
-        rightMargin = MaterialTheme.spacing.smallMedium
+        rightMargin = MaterialTheme.spacing.smallMedium,
+        modifier = Modifier
+            .fillMaxHeight()
+            .clip(RoundedCornerShape(4.dp))
     ) {
         onClick()
     }
@@ -80,13 +86,11 @@ fun TopAppBarView(
     modifier: Modifier = Modifier,
     leftMargin: Dp,
     rightMargin: Dp,
-    contentColor: Color=MaterialTheme.colors.primary,
+    contentColor: Color = MaterialTheme.colors.primary,
     onClick: () -> Unit
 ) {
     Row(
-        modifier = Modifier
-            .fillMaxHeight()
-            .clip(RoundedCornerShape(4.dp))
+        modifier = modifier
             .clickable {
                 onClick()
             },

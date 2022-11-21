@@ -13,4 +13,7 @@ sealed class Screen(val route: String) {
     object SeasonsScreen:Screen(route="seasons_screen")
     object StatsDisconnectedGameScreen:Screen(route="stats_disconnected_game_screen")
     object ConnectGame:Screen(route="connect_game_screen")
+
+    //tasks
+    object CompletedTasks:Screen(route = "completed_tasks_screen")
 }

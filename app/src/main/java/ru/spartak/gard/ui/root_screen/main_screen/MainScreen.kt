@@ -25,10 +25,7 @@ import ru.spartak.gard.utils.Constant
 @Composable
 fun MainScreen(
     rootNavController: NavController,
-    startDestination: String = rootNavController.previousBackStackEntry?.arguments?.getString(
-        Constant.MAIN_GRAPH_START_DESTINATION
-    )
-        ?: BottomScreen.HomeScreen.route
+    startDestination: String,
 ) {
     val navController = rememberNavController()
     val bottomScreens = listOf(

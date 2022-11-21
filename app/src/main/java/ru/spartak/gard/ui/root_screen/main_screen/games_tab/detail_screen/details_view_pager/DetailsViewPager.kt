@@ -51,7 +51,6 @@ fun DetailsViewPagerTabs(
     modifier: Modifier,
     onClick: (index: Int, tab: DetailsTabItem) -> Unit
 ) {
-    val scope = rememberCoroutineScope()
     TabRow(
         modifier = modifier,
         selectedTabIndex = pagerState.currentPage,
@@ -81,46 +80,6 @@ fun DetailsViewPagerTabs(
     }
 }
 
-
-@OptIn(ExperimentalPagerApi::class)
-@Composable
-fun DetailsViewPagerTabsDisconnected(
-    tabs: List<DetailsTabItem>,
-    pagerState: PagerState,
-    modifier: Modifier,
-    navController: NavController
-) {
-    val scope = rememberCoroutineScope()
-    TabRow(
-        modifier = modifier,
-        selectedTabIndex = pagerState.currentPage,
-        backgroundColor = MaterialTheme.colors.background,
-        contentColor = Text50,
-        indicator = { tabPositions ->
-            TabRowDefaults.Indicator(
-                Modifier.pagerTabIndicatorOffset(pagerState, tabPositions)
-            )
-        }) {
-        tabs.forEachIndexed { index, tab ->
-            val isSelected = pagerState.currentPage == index
-            Tab(
-                text = {
-                    Text(
-                        tab.title,
-                        style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Bold),
-                        color = if (isSelected) Text50 else Text500
-                    )
-                },
-                selected = isSelected,
-                onClick = {
-                    scope.launch {
-                        if (tab == DetailsTabItem.Stats) navController.navigate(Screen.StatsDisconnectedGameScreen.route)
-                    }
-                },
-            )
-        }
-    }
-}
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable

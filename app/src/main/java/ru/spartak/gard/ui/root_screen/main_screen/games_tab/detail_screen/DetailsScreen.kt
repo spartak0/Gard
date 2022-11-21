@@ -1,38 +1,42 @@
 package ru.spartak.gard.ui.root_screen.main_screen.games_tab.detail_screen
 
+import android.annotation.SuppressLint
+import androidx.compose.animation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.core.os.bundleOf
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import ru.spartak.gard.R
 import ru.spartak.gard.ui.details.BackBtn
 import ru.spartak.gard.ui.details.TopBar
+import ru.spartak.gard.ui.details.topAlign
 import ru.spartak.gard.ui.navigation.Screen
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.detail_screen.details_view_pager.DetailsTabItem
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.detail_screen.details_view_pager.DetailsTabsContent
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.detail_screen.details_view_pager.DetailsViewPagerTabs
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.games_screen.ConnectionStatus
+import ru.spartak.gard.ui.root_screen.main_screen.home_tab.profile_screen.Toast
+import ru.spartak.gard.ui.theme.Error600
 import ru.spartak.gard.ui.theme.GardTheme
 import ru.spartak.gard.ui.theme.spacing
-import ru.spartak.gard.utils.Constant
 
+@SuppressLint("UnrememberedMutableState")
 @OptIn(ExperimentalPagerApi::class)
 @Composable
 fun DetailsScreen(
     navController: NavController,
     connectionStatus: ConnectionStatus,
-    startViewPagerTab:Int,
+    startViewPagerTab: Int,
+    errorToastState: Boolean,
     viewModel: DetailsViewModel = hiltViewModel()
 ) {
     val scope = rememberCoroutineScope()
@@ -41,13 +45,18 @@ fun DetailsScreen(
         DetailsTabItem.Stats,
     )
     val pagerState = rememberPagerState()
+    val toastState = remember{mutableStateOf(false)}
     LaunchedEffect(pagerState) {
         this.launch(Dispatchers.IO) {
             pagerState.scrollToPage(startViewPagerTab)
         }
+        this.launch(Dispatchers.Main){
+            delay(1000)
+            toastState.value=errorToastState
+        }
     }
     GardTheme {
-        Column {
+        Column(modifier = Modifier.fillMaxSize()) {
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             DetailsTopBar(subtitle = tabs[pagerState.currentPage].title) {
                 navController.navigateUp()
@@ -76,11 +85,35 @@ fun DetailsScreen(
                 modifier = Modifier.fillMaxSize()
             )
         }
+        AnimatedVisibility(
+            visible = toastState.value,
+            enter = fadeIn() + expandVertically(),
+            exit = fadeOut() + shrinkVertically()
+        ) {
+            Toast(
+                iconId = R.drawable.ic_warning,
+                backgroundColor = Error600,
+                text = "Something gone wrong. Try again later",
+                modifier = Modifier
+                    .padding(
+                        start = MaterialTheme.spacing.small,
+                        end = MaterialTheme.spacing.small,
+                        top = 20.dp,
+                    )
+                    .fillMaxWidth()
+                    .height(45.dp)
+                    .topAlign(),
+                dismiss = {
+                    toastState.value = false
+                }
+            )
+        }
     }
+
     //clear(navController=navController)
 }
 
-fun clear(navController: NavController){
+fun clear(navController: NavController) {
     navController.previousBackStackEntry?.arguments?.clear()
 }
 

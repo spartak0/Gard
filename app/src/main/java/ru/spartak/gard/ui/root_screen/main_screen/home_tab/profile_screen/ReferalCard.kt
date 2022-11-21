@@ -29,7 +29,7 @@ import ru.spartak.gard.R
 import ru.spartak.gard.ui.theme.*
 
 @Composable
-fun RefferalsCard(refferalCode: String, toastCopiedState:MutableState<Boolean>) {
+fun RefferalsCard(refferalCode: String, onCopied:()->Unit,) {
     val clipboardManager: ClipboardManager = LocalClipboardManager.current
     Surface(
         modifier = Modifier
@@ -61,7 +61,7 @@ fun RefferalsCard(refferalCode: String, toastCopiedState:MutableState<Boolean>) 
                     .fillMaxHeight()
                     .width(120.dp), onClick = {
                     clipboardManager.setText(AnnotatedString(refferalCode))
-                    toastCopiedState.value=true
+                    onCopied()
                 })
             }
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))

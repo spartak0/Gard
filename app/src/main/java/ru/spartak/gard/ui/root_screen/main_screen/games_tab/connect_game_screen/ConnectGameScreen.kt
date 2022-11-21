@@ -86,7 +86,9 @@ fun ConnectGameScreen(navController: NavController) {
                             Screen.DetailScreen.route,
                             bundleOf(
                                 Constant.GAME_STATUS_KEY to ConnectionStatus.CONNECTED,
-                                Constant.START_VIEW_PAGER_TAB to 1
+                                Constant.START_VIEW_PAGER_TAB to 1,
+                                Constant.ERROR_TOAST_KEY to true
+
                             )
                         )
                         loadState.value=false

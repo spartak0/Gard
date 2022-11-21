@@ -20,7 +20,6 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -41,54 +40,27 @@ import ru.spartak.gard.utils.Constant
 fun ProfileScreen(
     mainNavController: NavController,
     rootNavController: NavController,
+    saveToastState: Boolean,
     levelOnClick: () -> Unit
 ) {
-
-    val visibleCopiedToast = remember { mutableStateOf(false) }
-    val visibleSaveToast = mutableStateOf(
-        rootNavController.previousBackStackEntry?.arguments?.getBoolean(Constant.SAVE_TOAST_KEY)
-            ?: false
-    )
-    val visibleDialog = remember { mutableStateOf(false) }
+    val visibleToast = remember { mutableStateOf(Pair(false, "")) }
+    if (saveToastState) visibleToast.value = Pair(true, stringResource(id = R.string.saved))
+    val copiedText = stringResource(id = R.string.copied)
+//    val visibleCopiedToast = remember { mutableStateOf(false) }
+//    val visibleSaveToast = remember { mutableStateOf(saveToastState) }
+//    val visibleToast = visibleCopiedToast.value or visibleSaveToast.value
+    val visibleLogOutDialog = remember { mutableStateOf(false) }
     GardTheme {
         Column(
             modifier = Modifier
                 .padding(horizontal = MaterialTheme.spacing.medium)
         ) {
-//            AnimatedVisibility(visible = visibleSaveToast.value) {
-//                CoroutineScope(Dispatchers.Main).launch {
-//                    delay(1000)
-//                }
-//                Toast(
-//                    iconId = R.drawable.ic_check_mark,
-//                    backgroundColor = Success500,
-//                    text = if (showSaveToast) stringResource(R.string.saved) else stringResource(
-//                        R.string.saved
-//                    ),
-//                    modifier = Modifier
-//                        .padding(
-//                            start = MaterialTheme.spacing.small,
-//                            end = MaterialTheme.spacing.small,
-//                            top = 20.dp,
-//                            bottom = MaterialTheme.spacing.small
-//                        )
-//                        .fillMaxWidth()
-//                        .height(45.dp),
-//                    dismiss = {
-//                        visibleSaveToast.value = false
-//                        navController.previousBackStackEntry?.arguments?.putAll(bundleOf(Constant.SAVE_TOAST_KEY to false))
-//                    }
-//                )
-//
-//            }
 
-            AnimatedVisibility(visible = visibleCopiedToast.value || visibleSaveToast.value) {
+            AnimatedVisibility(visible = visibleToast.value.first) {
                 Toast(
                     iconId = R.drawable.ic_check_mark,
                     backgroundColor = Success500,
-                    text = if (visibleSaveToast.value) stringResource(R.string.saved) else stringResource(
-                        R.string.copied
-                    ),
+                    text = visibleToast.value.second,
                     modifier = Modifier
                         .padding(
                             start = MaterialTheme.spacing.small,
@@ -99,8 +71,7 @@ fun ProfileScreen(
                         .fillMaxWidth()
                         .height(45.dp),
                     dismiss = {
-                        visibleCopiedToast.value = false
-                        visibleSaveToast.value = false
+                        visibleToast.value = Pair(false, visibleToast.value.second)
                         rootNavController.previousBackStackEntry?.arguments?.putAll(
                             bundleOf(
                                 Constant.SAVE_TOAST_KEY to false
@@ -109,7 +80,7 @@ fun ProfileScreen(
                     }
                 )
             }
-            AnimatedVisibility(visible = !visibleCopiedToast.value && !visibleSaveToast.value) {
+            AnimatedVisibility(visible = !visibleToast.value.first) {
                 ProfileTopBar(
                     backOnClick = { mainNavController.navigateUp() },
                     editOnClick = { mainNavController.navigate(Screen.EditScreen.route) },
@@ -127,7 +98,9 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.smallMedium))
             Email(text = "123@mail.ru")
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
-            RefferalsCard(refferalCode = "FF33GG", visibleCopiedToast)
+            RefferalsCard(refferalCode = "FF33GG") {
+                visibleToast.value = Pair(true, copiedText)
+            }
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
             SettingsItem(onClick = { mainNavController.navigate(Screen.SettingsScreen.route) })
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
@@ -137,11 +110,11 @@ fun ProfileScreen(
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             PoliceItem(onClick = {})
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.mediumLarge))
-            LogOutItem(onClick = { visibleDialog.value = true })
+            LogOutItem(onClick = { visibleLogOutDialog.value = true })
         }
-        if (visibleDialog.value) {
+        if (visibleLogOutDialog.value) {
             LogOutDialog(
-                showDialog = visibleDialog,
+                showDialog = visibleLogOutDialog,
                 modifier = Modifier
                     .bottomAlign()
                     .padding(bottom = 40.dp)

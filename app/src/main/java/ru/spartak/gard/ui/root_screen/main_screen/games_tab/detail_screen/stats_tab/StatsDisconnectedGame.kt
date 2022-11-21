@@ -37,7 +37,7 @@ fun StatsDisconnectedGame(navController: NavController) {
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(200.dp),
-                contentScale = ContentScale.Crop
+                contentScale = ContentScale.FillHeight
             )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
             Text(

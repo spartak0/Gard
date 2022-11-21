@@ -23,9 +23,9 @@ import ru.spartak.gard.ui.theme.spacing
 @Composable
 fun LoadBtn(
     modifier: Modifier,
-    onClick: () -> Unit,
     text: String,
-    loadState: Boolean
+    loadState: Boolean,
+    onClick: () -> Unit,
 ) {
     Box(modifier = modifier) {
         Box(

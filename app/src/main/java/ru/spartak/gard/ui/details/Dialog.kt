@@ -103,8 +103,14 @@ fun Dialog(
 }
 
 fun Modifier.bottomAlign() = layout { measurable, constraints ->
-    val placeable = measurable.measure(constraints);
+    val placeable = measurable.measure(constraints)
     layout(constraints.maxWidth, constraints.maxHeight) {
         placeable.place(0, constraints.maxHeight - placeable.height, 10f)
+    }
+}
+fun Modifier.topAlign() = layout { measurable, constraints ->
+    val placeable = measurable.measure(constraints)
+    layout(constraints.maxWidth, constraints.maxHeight) {
+        placeable.place(0, -(constraints.maxHeight - placeable.height), 10f)
     }
 }

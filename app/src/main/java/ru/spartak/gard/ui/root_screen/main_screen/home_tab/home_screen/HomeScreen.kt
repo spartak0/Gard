@@ -15,21 +15,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ru.spartak.gard.R
-import ru.spartak.gard.utils.ParserDecimal
+import ru.spartak.gard.ui.navigation.BottomScreen
 import ru.spartak.gard.ui.navigation.Screen
-import ru.spartak.gard.ui.navigation.navigate
 import ru.spartak.gard.ui.theme.*
+import ru.spartak.gard.utils.ParserDecimal
 
 
 //todo add notification service
 @Composable
 fun HomeScreen(navController: NavController) {
-    GardTheme() {
+    GardTheme {
         Column(
             modifier = Modifier
                 .padding(horizontal = 16.dp)
@@ -50,7 +49,9 @@ fun HomeScreen(navController: NavController) {
                 Username(
                     username = "nagibat8".uppercase(),
                     onClick = { navController.navigate(Screen.ProfileScreen.route) })
-                NotificationBell(countNotification = 1, onClick = {navController.navigate(Screen.NotificationsScreen.route)})
+                NotificationBell(
+                    countNotification = 1,
+                    onClick = { navController.navigate(Screen.NotificationsScreen.route) })
             }
             Spacer(modifier = Modifier.height(21.dp))
             ProfileCard(
@@ -87,7 +88,9 @@ fun HomeScreen(navController: NavController) {
                 TasksCard(countActive = 2, countCompleted = 1, onClick = {})
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             }
-            CardConnectFirstGame()
+            CardConnectFirstGame() {
+                navController.navigate(BottomScreen.GamesScreen.route)
+            }
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
             Subtitle(text = stringResource(R.string.earnings))
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.mediumLarge))
@@ -151,7 +154,9 @@ fun EarningsCard(subtitle: String, text: String, iconId: Int, pts: Int) {
                 Image(
                     painter = painterResource(id = iconId),
                     contentDescription = null,
-                    modifier = Modifier.size(48.dp).padding(MaterialTheme.spacing.small),
+                    modifier = Modifier
+                        .size(48.dp)
+                        .padding(MaterialTheme.spacing.small),
                     contentScale = ContentScale.Fit
                 )
                 Spacer(modifier = Modifier.width(MaterialTheme.spacing.smallMedium))
@@ -180,7 +185,7 @@ fun EarningsCard(subtitle: String, text: String, iconId: Int, pts: Int) {
 }
 
 @Composable
-fun CardConnectFirstGame() {
+fun CardConnectFirstGame(onClick: () -> Unit) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
@@ -207,9 +212,10 @@ fun CardConnectFirstGame() {
             Surface(
                 modifier = Modifier
                     .height(40.dp)
-                    .width(125.dp),
+                    .width(125.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .clickable { onClick() },
                 color = MaterialTheme.colors.primary,
-                shape = RoundedCornerShape(4.dp)
             ) {
                 Box(contentAlignment = Alignment.Center) {
                     Row(verticalAlignment = Alignment.CenterVertically) {

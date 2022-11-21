@@ -35,3 +35,7 @@ val Muted100 = Color(0xFFF5F5F5) //icon
 val Error500 = Color(0xFFEF4444) //error
 val Error600 = Color(0xFFDC2626) //error
 val Primary600 = Color(0xFF0891B2)
+val Tertiary50 = Color(0xFFECFDF5)
+val Tertiary200 = Color(0xFF98F5EC)
+val Tertiary400 = Color(0xFF05F2DB)
+val Warning500= Color(0xFFF97316)

@@ -2,6 +2,7 @@ package ru.spartak.gard.ui.root_screen.confirmation_screen
 
 import android.annotation.SuppressLint
 import android.text.format.DateUtils
+import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -14,6 +15,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
@@ -27,15 +29,15 @@ import kotlinx.coroutines.delay
 import ru.spartak.gard.R
 import ru.spartak.gard.ui.details.BackBtn
 import ru.spartak.gard.ui.details.TopBar
+import ru.spartak.gard.ui.details.topAlign
 import ru.spartak.gard.ui.navigation.Graphs
 import ru.spartak.gard.ui.navigation.Screen
 import ru.spartak.gard.ui.navigation.navigate
 import ru.spartak.gard.ui.root_screen.main_screen.home_tab.edit_screen.OutlinedTextField
-import ru.spartak.gard.ui.theme.GardTheme
-import ru.spartak.gard.ui.theme.Tertiary500
-import ru.spartak.gard.ui.theme.Text50
-import ru.spartak.gard.ui.theme.spacing
+import ru.spartak.gard.ui.root_screen.main_screen.home_tab.profile_screen.Toast
+import ru.spartak.gard.ui.theme.*
 import ru.spartak.gard.utils.Constant
+import ru.spartak.gard.utils.StatusBarHeight
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
@@ -43,6 +45,14 @@ fun ConfirmationScreen(navController: NavController) {
     val text = remember {
         mutableStateOf("")
     }
+//    val isError = remember{ mutableStateOf(false)}
+//    val isSendCode = remember{ mutableStateOf(false)}
+    val toastState = remember { mutableStateOf(Triple(false,ToastState.Success as ToastState, "")) }
+//    val toast = isError.value or isSendCode.value
+    val borderColor = animateColorAsState(
+        targetValue = if ( toastState.value.first && toastState.value.second == ToastState.Error
+        ) Error600 else Tertiary500
+    )
 
     GardTheme {
         Column {
@@ -61,11 +71,12 @@ fun ConfirmationScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.mediumLarge))
             CodeTextField(
                 text = text,
-                code = "1234",
+                code = "123456",
                 modifier = Modifier
                     .padding(horizontal = MaterialTheme.spacing.medium)
                     .fillMaxWidth()
                     .height(40.dp),
+                borderColor = SolidColor(borderColor.value),
                 onSuccess = {
                     navController.navigate(
                         Graphs.Main,
@@ -74,6 +85,9 @@ fun ConfirmationScreen(navController: NavController) {
                             Constant.SAVE_TOAST_KEY to true
                         )
                     )
+                },
+                onError = {
+                    toastState.value = Triple(true ,ToastState.Error,"Wrong code")
                 }
             )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
@@ -82,11 +96,36 @@ fun ConfirmationScreen(navController: NavController) {
                     .padding(horizontal = MaterialTheme.spacing.medium)
                     .fillMaxWidth()
                     .height(41.dp),
-                onClick = {}
+                onClick = {
+                    toastState.value = Triple(true,ToastState.Info,"Another code was sended to your E-Mail")
+                }
+            )
+        }
+        AnimatedVisibility(
+            visible = toastState.value.first,
+            enter = fadeIn() + expandVertically(),
+            exit = fadeOut() + shrinkVertically()
+        ) {
+            Toast(
+                iconId = toastState.value.second.iconId,
+                backgroundColor = toastState.value.second.color,
+                text = toastState.value.third,
+                modifier = Modifier
+                    .padding(
+                        start = MaterialTheme.spacing.small,
+                        end = MaterialTheme.spacing.small,
+                        top = StatusBarHeight.calculate() + 20.dp,
+                    )
+                    .fillMaxWidth()
+                    .height(45.dp)
+                    .topAlign(),
+                dismiss = {
+                    toastState.value = toastState.value.copy(first = false)
+                }
             )
 
-
         }
+
     }
 }
 
@@ -112,7 +151,7 @@ fun SendAgainBtn(modifier: Modifier, onClick: () -> Unit) {
         Text(
             text = "Send  code again ${if (tick.value != 0) formatTime else ""}",
             style = MaterialTheme.typography.body2,
-            color = if (tick.value == 0) Text50 else Tertiary500
+            color = if (tick.value == 0) Tertiary500 else Tertiary500.copy(alpha = 0.5F)
         )
     }
 }
@@ -121,23 +160,31 @@ fun SendAgainBtn(modifier: Modifier, onClick: () -> Unit) {
 fun CodeTextField(
     text: MutableState<String>,
     code: String,
+    borderColor: Brush,
     onSuccess: () -> Unit,
+    onError: () -> Unit,
     modifier: Modifier
 ) {
     OutlinedTextField(
         value = text.value,
         onValueChange = {
-            text.value = it
-            if (text.value == code) onSuccess()
+            if (it.length <= 6) text.value = it
+            if (text.value.length == code.length) {
+                if (text.value == code) onSuccess()
+                else {
+                    onError()
+                }
+            }
         },
         modifier = modifier
             .border(
                 width = 2.dp,
-                brush = SolidColor(Color(0xFF00DEC8)),
+                brush = borderColor,
                 shape = RoundedCornerShape(4.dp)
             )
             .clip(RoundedCornerShape(4.dp))
             .background(brush = SolidColor(Color(0xFF059669).copy(0.1F))),
+        cursorColor = SolidColor(Tertiary500)
     )
 }
 

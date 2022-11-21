@@ -10,6 +10,7 @@ import ru.spartak.gard.ui.root_screen.main_screen.home_tab.levels_screen.LevelsS
 import ru.spartak.gard.ui.root_screen.main_screen.home_tab.notifications_screen.NotificationsScreen
 import ru.spartak.gard.ui.root_screen.main_screen.home_tab.profile_screen.ProfileScreen
 import ru.spartak.gard.ui.root_screen.main_screen.home_tab.settings_screen.SettingsScreen
+import ru.spartak.gard.utils.Constant
 
 fun NavGraphBuilder.homeContentComposable(
     rootNavController: NavController,
@@ -19,11 +20,15 @@ fun NavGraphBuilder.homeContentComposable(
         LevelsScreen(navController = mainNavController)
     }
     composable(route = Screen.ProfileScreen.route) {
-        ProfileScreen(
-            rootNavController=rootNavController,
-            mainNavController = mainNavController,
-            levelOnClick = { rootNavController.navigate(RootScreen.LevelUpScreen.route) }
-        )
+        rootNavController.previousBackStackEntry?.arguments.let {
+            val saveToastState = it?.getBoolean(Constant.SAVE_TOAST_KEY) ?: false
+            ProfileScreen(
+                rootNavController = rootNavController,
+                mainNavController = mainNavController,
+                saveToastState = saveToastState,
+                levelOnClick = { rootNavController.navigate(RootScreen.LevelUpScreen.route) }
+            )
+        }
     }
     composable(route = Screen.EditScreen.route) {
         EditScreen(navController = mainNavController, rootNavController = rootNavController)
