@@ -15,11 +15,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.SolidColor
-import androidx.compose.ui.modifier.modifierLocalConsumer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.core.os.bundleOf
 import androidx.navigation.NavController
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -31,10 +31,17 @@ import ru.spartak.gard.ui.details.CustomTextField
 import ru.spartak.gard.ui.details.LoadBtn
 import ru.spartak.gard.ui.details.TopBar
 import ru.spartak.gard.ui.navigation.RootScreen
+import ru.spartak.gard.ui.navigation.Screen
+import ru.spartak.gard.ui.navigation.navigate
 import ru.spartak.gard.ui.theme.*
+import ru.spartak.gard.utils.Constant
 
 @Composable
 fun EditScreen(navController: NavController, rootNavController: NavController) {
+    val loadState = remember {
+        mutableStateOf(false)
+    }
+
     GardTheme {
         Box(
             modifier = Modifier
@@ -79,9 +86,6 @@ fun EditScreen(navController: NavController, rootNavController: NavController) {
                     .align(Alignment.BottomCenter)
                     .fillMaxWidth()
             ) {
-                val loadState = remember {
-                    mutableStateOf(false)
-                }
                 SaveBtn(
                     modifier = Modifier
                         .padding(MaterialTheme.spacing.medium)
@@ -97,7 +101,14 @@ fun EditScreen(navController: NavController, rootNavController: NavController) {
                             }
                             tmp.join()
                             loadState.value = false
-                            rootNavController.navigate(RootScreen.Confirmation.route)
+                            rootNavController.navigate(
+                                RootScreen.Confirmation.route, bundleOf(
+                                    Constant.CONFIRMATION_BUNDLE to bundleOf(
+                                        Constant.MAIN_GRAPH_START_DESTINATION to Screen.ProfileScreen.route,
+                                        Constant.SAVE_TOAST_KEY to true
+                                    )
+                                )
+                            )
                         }
 
 

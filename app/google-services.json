@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "972164368959",
+    "firebase_url": "https://gard-fed17-default-rtdb.firebaseio.com",
+    "project_id": "gard-fed17",
+    "storage_bucket": "gard-fed17.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972164368959:android:29ab900251589f0048868a",
+        "android_client_info": {
+          "package_name": "ru.spartak.gard"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "972164368959-4a7us2dvfs5knamfk90dtauelif8bvsg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKTweNO3DHsY4AkkTvbFC23JPUKIbUkv4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "972164368959-4a7us2dvfs5knamfk90dtauelif8bvsg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

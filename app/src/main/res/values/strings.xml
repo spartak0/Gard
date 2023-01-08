@@ -46,4 +46,7 @@
     <string name="my_stats">MyStats</string>
     <string name="connect_game">Connect Game</string>
     <string name="confirmation">Confirmation</string>
+    <string name="shop">Shop</string>
+    <string name="checkout">Checkout</string>
+    <string name="collect">Collect</string>
 </resources>

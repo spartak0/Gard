@@ -24,9 +24,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.navigation.NavController
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import ru.spartak.gard.R
 import ru.spartak.gard.ui.details.Border
 import ru.spartak.gard.ui.details.CustomTextField
+import ru.spartak.gard.ui.details.LoadBtn
 import ru.spartak.gard.ui.details.border
 import ru.spartak.gard.ui.navigation.Screen
 import ru.spartak.gard.ui.navigation.navigate
@@ -37,6 +42,8 @@ import ru.spartak.gard.utils.Constant
 fun GamesScreen(navController: NavController) {
     val suggestGameVisible = remember { mutableStateOf(true) }
     val suggestGameText = remember { mutableStateOf("") }
+    val loadStateBtn = remember { mutableStateOf(false) }
+
     GardTheme {
         Column(
             Modifier
@@ -125,29 +132,32 @@ fun GamesScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             ProceedBtn(modifier = Modifier
                 .fillMaxWidth()
-                .height(41.dp), onClick = {})
+                .height(41.dp),
+                loadState = loadStateBtn.value,
+                onClick = {
+                CoroutineScope(Dispatchers.Main).launch {
+                    loadStateBtn.value = true
+                    val tmp = CoroutineScope(Dispatchers.IO).launch {
+                        delay(2000)
+                    }
+                    tmp.join()
+                    loadStateBtn.value = false
+                }
+            })
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraLarge))
         }
     }
 }
 
 @Composable
-fun ProceedBtn(modifier: Modifier, onClick: () -> Unit) {
-    Surface(
+fun ProceedBtn(modifier: Modifier,loadState: Boolean, onClick: () -> Unit) {
+    LoadBtn(
         modifier = modifier
-            .clip(RoundedCornerShape(4.dp))
-            .clickable { onClick() }) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.primary),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "Proceed",
-                style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Medium)
-            )
-        }
+            .clip(RoundedCornerShape(4.dp)),
+        text= "Proceed",
+        loadState = loadState
+    ) {
+        onClick()
     }
 }
 

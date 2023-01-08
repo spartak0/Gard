@@ -17,7 +17,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-@OptIn(ExperimentalPagerApi::class)
 @HiltViewModel
 class DetailsViewModel @Inject constructor() : ViewModel() {
     val seasonList = listOf(

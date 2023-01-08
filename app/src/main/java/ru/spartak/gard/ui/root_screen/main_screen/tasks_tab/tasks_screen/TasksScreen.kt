@@ -16,6 +16,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -97,12 +98,12 @@ fun TasksContent(modifier: Modifier, navController: NavController) {
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .fillMaxWidth()
-                .height(73.dp)
+                .height(bottomViewHeight)
                 .background(Dark100)
                 .border(bottom = Border(1.dp, Dark200))
         ) {
             CustomBtn(
-                text = "Collect",
+                text = stringResource(R.string.collect),
                 color = Success500,
                 icon = painterResource(id = R.drawable.ic_arrow_forward),
                 modifier = Modifier.padding(MaterialTheme.spacing.medium)

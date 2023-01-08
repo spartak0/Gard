@@ -13,6 +13,7 @@ import ru.spartak.gard.ui.navigation.content.homeContentComposable
 import ru.spartak.gard.ui.navigation.content.tasksContentComposable
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.games_screen.GamesScreen
 import ru.spartak.gard.ui.root_screen.main_screen.home_tab.home_screen.HomeScreen
+import ru.spartak.gard.ui.root_screen.main_screen.shop_tab.shop_screen.ShopScreen
 import ru.spartak.gard.ui.root_screen.main_screen.tasks_tab.tasks_screen.TasksScreen
 
 @Composable
@@ -37,6 +38,7 @@ fun MainNavGraph(
             TasksScreen(navController = navController)
         }
         composable(route = BottomScreen.ShopScreen.route) {
+            ShopScreen(navController = navController)
         }
         homeContentComposable(rootNavController = rootNavController, mainNavController = navController)
         gamesContentComposable(rootNavController = rootNavController, mainNavController = navController)

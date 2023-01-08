@@ -189,52 +189,63 @@ fun CardConnectFirstGame(onClick: () -> Unit) {
     Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .height(120.dp),
+            .height(120.dp)
+            .clip(RoundedCornerShape(4.dp)),
         border = BorderStroke(2.dp, Tertiary500),
         shape = RoundedCornerShape(4.dp)
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
-        ) {
-            Column {
-                Text(
-                    text = stringResource(id = R.string.not_games_connect),
-                    style = MaterialTheme.typography.subtitle1
-                )
-                Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-                Text(
-                    text = stringResource(id = R.string.add_first_game),
-                    style = MaterialTheme.typography.overline.copy(letterSpacing = 0.15.sp)
-                )
-            }
-            Surface(
-                modifier = Modifier
-                    .height(40.dp)
-                    .width(125.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .clickable { onClick() },
-                color = MaterialTheme.colors.primary,
+        Box {
+            Image(
+                painter = painterResource(id = R.drawable.gamepad),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                modifier = Modifier.fillMaxSize(),
+                alpha = 0.5f
+            )
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium).fillMaxSize()
             ) {
-                Box(contentAlignment = Alignment.Center) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = stringResource(R.string.to_the_games),
-                            style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Medium),
-                            color = White,
-                        )
-                        Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_arrow_forward),
-                            contentDescription = null,
-                            tint = White
-                        )
-                    }
+                Column {
+                    Text(
+                        text = stringResource(id = R.string.not_games_connect),
+                        style = MaterialTheme.typography.subtitle1
+                    )
+                    Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
+                    Text(
+                        text = stringResource(id = R.string.add_first_game),
+                        style = MaterialTheme.typography.overline.copy(letterSpacing = 0.15.sp)
+                    )
                 }
+                Surface(
+                    modifier = Modifier
+                        .height(40.dp)
+                        .width(125.dp)
+                        .clip(RoundedCornerShape(4.dp))
+                        .clickable { onClick() },
+                    color = MaterialTheme.colors.primary,
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Text(
+                                text = stringResource(R.string.to_the_games),
+                                style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Medium),
+                                color = White,
+                            )
+                            Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
+                            Icon(
+                                painter = painterResource(id = R.drawable.ic_arrow_forward),
+                                contentDescription = null,
+                                tint = White
+                            )
+                        }
+                    }
 
+                }
             }
         }
+
     }
 }
 

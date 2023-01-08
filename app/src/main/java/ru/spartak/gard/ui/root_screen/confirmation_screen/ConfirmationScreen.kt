@@ -1,7 +1,10 @@
 package ru.spartak.gard.ui.root_screen.confirmation_screen
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.os.Bundle
 import android.text.format.DateUtils
+import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -11,7 +14,10 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,41 +25,83 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.core.os.bundleOf
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.firebase.FirebaseException
+import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.PhoneAuthCredential
+import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.coroutines.delay
 import ru.spartak.gard.R
 import ru.spartak.gard.ui.details.BackBtn
 import ru.spartak.gard.ui.details.TopBar
 import ru.spartak.gard.ui.details.topAlign
 import ru.spartak.gard.ui.navigation.Graphs
-import ru.spartak.gard.ui.navigation.Screen
 import ru.spartak.gard.ui.navigation.navigate
 import ru.spartak.gard.ui.root_screen.main_screen.home_tab.edit_screen.OutlinedTextField
 import ru.spartak.gard.ui.root_screen.main_screen.home_tab.profile_screen.Toast
-import ru.spartak.gard.ui.theme.*
-import ru.spartak.gard.utils.Constant
+import ru.spartak.gard.ui.theme.Error600
+import ru.spartak.gard.ui.theme.GardTheme
+import ru.spartak.gard.ui.theme.Tertiary500
+import ru.spartak.gard.ui.theme.spacing
 import ru.spartak.gard.utils.StatusBarHeight
 import kotlin.time.Duration.Companion.seconds
 
+private lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
+private lateinit var storedVerificationId: String
+
 @Composable
-fun ConfirmationScreen(navController: NavController) {
+fun ConfirmationScreen(
+    navController: NavController,
+    bundleNavigation: Bundle,
+    viewModel: ConfirmationViewModel = hiltViewModel(),
+) {
+    val phoneNumber = "+79525500322"
     val text = remember {
         mutableStateOf("")
     }
-//    val isError = remember{ mutableStateOf(false)}
-//    val isSendCode = remember{ mutableStateOf(false)}
-    val toastState = remember { mutableStateOf(Triple(false,ToastState.Success as ToastState, "")) }
-//    val toast = isError.value or isSendCode.value
+    val toastState =
+        remember { mutableStateOf(Triple(false, ToastState.Success as ToastState, "")) }
     val borderColor = animateColorAsState(
-        targetValue = if ( toastState.value.first && toastState.value.second == ToastState.Error
+        targetValue = if (toastState.value.first && toastState.value.second == ToastState.Error
         ) Error600 else Tertiary500
     )
 
+    val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+
+        override fun onVerificationCompleted(credential: PhoneAuthCredential) {
+            Log.d("AAA", "onVerificationCompleted:$credential")
+        }
+
+        override fun onVerificationFailed(e: FirebaseException) {
+            Log.w("AAA", "onVerificationFailed", e)
+
+            when (e) {
+                is FirebaseAuthInvalidCredentialsException -> {
+                    // Invalid request
+                }
+                is FirebaseTooManyRequestsException -> {
+                    // The SMS quota for the project has been exceeded
+                }
+                else -> toastState.value = Triple(true, ToastState.Error as ToastState, e.message!!)
+            }
+        }
+
+        override fun onCodeSent(
+            verificationId: String,
+            token: PhoneAuthProvider.ForceResendingToken
+        ) {
+            Log.d("AAA", "onCodeSent:$verificationId")
+            storedVerificationId = verificationId
+            resendToken = token
+        }
+    }
+
+    viewModel.sendVerificationCode(phoneNumber, callbacks, navController.context as Activity)
     GardTheme {
         Column {
             Spacer(modifier = Modifier.height(38.dp + MaterialTheme.spacing.small))
@@ -70,25 +118,47 @@ fun ConfirmationScreen(navController: NavController) {
             TextConfirmation()
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.mediumLarge))
             CodeTextField(
-                text = text,
-                code = "123456",
+                value = text.value,
                 modifier = Modifier
                     .padding(horizontal = MaterialTheme.spacing.medium)
                     .fillMaxWidth()
                     .height(40.dp),
                 borderColor = SolidColor(borderColor.value),
-                onSuccess = {
-                    navController.navigate(
-                        Graphs.Main,
-                        bundleOf(
-                            Constant.MAIN_GRAPH_START_DESTINATION to Screen.ProfileScreen.route,
-                            Constant.SAVE_TOAST_KEY to true
-                        )
-                    )
-                },
-                onError = {
-                    toastState.value = Triple(true ,ToastState.Error,"Wrong code")
+                onValueChange = { str ->
+                    if (str.length <= 6) text.value = str
+                    if (str.length == 6) viewModel.verifyPhoneNumberWithCode(
+                        verificationId = storedVerificationId,
+                        code = str
+                    ) { taskVerify ->
+                        if (taskVerify.isSuccessful) {
+                            taskVerify.result?.user?.let { user ->
+                                viewModel.updateUser(user) { taskUpdateUser ->
+                                    if (taskUpdateUser.isSuccessful) navController.navigate(
+                                        Graphs.Main,
+                                        bundleNavigation
+                                    )
+                                    else toastState.value =
+                                        Triple(true, ToastState.Error, "Failed to update user")
+                                }
+                            }
+                        } else {
+                            toastState.value =
+                                Triple(true, ToastState.Error, "Wrong code")
+                        }
+                    }
                 }
+                //todo подумать как упростить
+//                code = storedVerificationId.value,
+//                onSuccess = {
+//                    navController.navigate(
+//                        Graphs.Main,
+//                        bundleNavigation
+//
+//                    )
+//                },
+//                onError = {
+//                    toastState.value = Triple(true, ToastState.Error, "Wrong code")
+//                }
             )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
             SendAgainBtn(
@@ -97,7 +167,13 @@ fun ConfirmationScreen(navController: NavController) {
                     .fillMaxWidth()
                     .height(41.dp),
                 onClick = {
-                    toastState.value = Triple(true,ToastState.Info,"Another code was sended to your E-Mail")
+                    viewModel.resendVerificationCode(phoneNumber, resendToken, callbacks)
+                    toastState.value =
+                        Triple(
+                            true,
+                            ToastState.Info,
+                            "Another code was sended to your phone number"
+                        )
                 }
             )
         }
@@ -158,24 +234,14 @@ fun SendAgainBtn(modifier: Modifier, onClick: () -> Unit) {
 
 @Composable
 fun CodeTextField(
-    text: MutableState<String>,
-    code: String,
+    value: String,
     borderColor: Brush,
-    onSuccess: () -> Unit,
-    onError: () -> Unit,
+    onValueChange: (String) -> Unit,
     modifier: Modifier
 ) {
     OutlinedTextField(
-        value = text.value,
-        onValueChange = {
-            if (it.length <= 6) text.value = it
-            if (text.value.length == code.length) {
-                if (text.value == code) onSuccess()
-                else {
-                    onError()
-                }
-            }
-        },
+        value = value,
+        onValueChange = onValueChange,
         modifier = modifier
             .border(
                 width = 2.dp,
@@ -209,7 +275,7 @@ fun SubtitleConfirmation() {
 @Composable
 fun ConfirmationTopBar(backOnClick: () -> Unit) {
     TopBar(
-        subtitleText = stringResource(R.string.confirmation),
+        subtitleText = "",
         modifier = Modifier
             .padding(horizontal = MaterialTheme.spacing.medium)
             .fillMaxWidth()
