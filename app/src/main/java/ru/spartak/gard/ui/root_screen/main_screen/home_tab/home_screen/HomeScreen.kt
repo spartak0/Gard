@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import ru.spartak.gard.R
-import ru.spartak.gard.ui.navigation.BottomScreen
-import ru.spartak.gard.ui.navigation.Screen
+import ru.spartak.gard.ui.root_screen.navigation.BottomScreen
+import ru.spartak.gard.ui.root_screen.navigation.Screen
 import ru.spartak.gard.ui.theme.*
 import ru.spartak.gard.utils.ParserDecimal
 

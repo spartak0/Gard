@@ -1,8 +1,9 @@
-package ru.spartak.gard.ui.navigation
+package ru.spartak.gard.ui.root_screen.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.core.os.bundleOf
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -42,20 +43,25 @@ fun RootNavGraph(
             )
         }
         composable(route = RootScreen.Confirmation.route) {
-            navController.previousBackStackEntry?.arguments.let {
-                val confirmationBundle = it?.getBundle(Constant.CONFIRMATION_BUNDLE) ?: bundleOf(
+            navController.previousBackStackEntry?.let {
+                val confirmationBundle = it.arguments?.getBundle(Constant.CONFIRMATION_BUNDLE) ?: bundleOf(
                     Constant.MAIN_GRAPH_START_DESTINATION to BottomScreen.HomeScreen.route
                 )
                 ConfirmationScreen(
                     navController = navController,
-                    bundleNavigation = confirmationBundle
+                    bundleNavigation = confirmationBundle,
+                    viewModel = hiltViewModel(it)
                 )
             }
         }
         composable(route = RootScreen.Login.route) {
-            LoginScreen(
-                navController = navController
-            )
+            navController.currentBackStackEntry?.let {
+                LoginScreen(
+                    navController = navController,
+                    viewModel = hiltViewModel(it)
+                )
+            }
+
         }
         composable(route = RootScreen.Splash.route) {
             SplashScreen(

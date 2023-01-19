@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -19,7 +20,7 @@ import ru.spartak.gard.R
 import ru.spartak.gard.ui.details.BackBtn
 import ru.spartak.gard.ui.details.TopBar
 import ru.spartak.gard.ui.details.topAlign
-import ru.spartak.gard.ui.navigation.Screen
+import ru.spartak.gard.ui.root_screen.navigation.Screen
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.detail_screen.details_view_pager.DetailsTabItem
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.detail_screen.details_view_pager.DetailsTabsContent
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.detail_screen.details_view_pager.DetailsViewPagerTabs
@@ -58,7 +59,7 @@ fun DetailsScreen(
     GardTheme {
         Column(modifier = Modifier.fillMaxSize()) {
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-            DetailsTopBar(subtitle = tabs[pagerState.currentPage].title) {
+            DetailsTopBar(subtitle = stringResource(id = tabs[pagerState.currentPage].titleId)) {
                 navController.navigateUp()
             }
             Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
@@ -93,7 +94,7 @@ fun DetailsScreen(
             Toast(
                 iconId = R.drawable.ic_warning,
                 backgroundColor = Error600,
-                text = "Something gone wrong. Try again later",
+                text = stringResource(R.string.wrong_try_later),
                 modifier = Modifier
                     .padding(
                         start = MaterialTheme.spacing.small,

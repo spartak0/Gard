@@ -20,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -123,7 +124,7 @@ fun GetBonusBtn(modifier: Modifier, onClick: () -> Unit) {
             horizontalArrangement = Arrangement.Center
         ) {
             Text(
-                text = "Get your bonus",
+                text = stringResource(R.string.get_your_bonus),
                 style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Normal)
             )
             Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
@@ -167,11 +168,11 @@ fun Ribbon(modifier: Modifier, levelName: String, levelNumber: String) {
         verticalArrangement = Arrangement.Center
     ) {
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-        Text(text = "Congratulations! You become", style = MaterialTheme.typography.caption)
+        Text(text = stringResource(R.string.congratulations), style = MaterialTheme.typography.caption)
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraSmall))
         Text(text = levelName, style = MaterialTheme.typography.h5)
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.extraSmall))
-        Text(text = "Level $levelNumber", style = MaterialTheme.typography.caption)
+        Text(text = stringResource(id = R.string.level)+ " $levelNumber", style = MaterialTheme.typography.caption)
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
     }
 }
@@ -179,7 +180,7 @@ fun Ribbon(modifier: Modifier, levelName: String, levelNumber: String) {
 @Composable
 fun LevelUpTopBar(modifier: Modifier, backOnClick: () -> Unit) {
     TopBar(
-        subtitleText = "Level Up!",
+        subtitleText = stringResource(R.string.lelvel_up),
         modifier = modifier,
         leftView = {
             BackBtn(contentColor = Text50) {

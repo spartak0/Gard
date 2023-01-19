@@ -1,17 +1,20 @@
-package ru.spartak.gard.data
+package ru.spartak.gard.data.db.firebase
 
 import android.app.Activity
 import android.content.Context
+import android.content.ContextWrapper
+import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.*
 import com.google.firebase.auth.PhoneAuthProvider.OnVerificationStateChangedCallbacks
-import com.google.firebase.database.FirebaseDatabase
+import ru.spartak.gard.ui.main_activity.MainActivity
 import java.util.concurrent.TimeUnit
 
 class FirebaseService(
     private val context: Context,
     private val auth: FirebaseAuth,
-    private val database: FirebaseDatabase,
 ) {
 
     fun sendVerificationCode(
@@ -19,6 +22,7 @@ class FirebaseService(
         callbacks: OnVerificationStateChangedCallbacks,
         activity: Activity
     ) {
+        Log.e("AAA", "sendVerificationCode: $phoneNumber")
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(phoneNumber)       // Phone number to verify
             .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
@@ -62,4 +66,27 @@ class FirebaseService(
         return auth.updateCurrentUser(firebaseUser)
     }
 
+    fun getCurrentUser(): FirebaseUser? {
+        return auth.currentUser
+    }
+
+    fun signOut(){
+        auth.signOut()
+    }
+    fun getPhoneNumber(){
+    }
+}
+
+fun Context.getActivity(): Activity? {
+    var currentContext = this
+    while (currentContext is ContextWrapper) {
+        if (currentContext is AppCompatActivity) {
+            return currentContext
+        }
+        if (currentContext is Activity) {
+            return currentContext
+        }
+        currentContext = currentContext.baseContext
+    }
+    return null
 }

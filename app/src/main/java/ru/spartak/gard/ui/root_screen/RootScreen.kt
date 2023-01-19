@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import androidx.compose.material.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.rememberNavController
-import ru.spartak.gard.ui.navigation.RootNavGraph
-import ru.spartak.gard.ui.navigation.RootScreen
+import ru.spartak.gard.ui.root_screen.navigation.RootNavGraph
+import ru.spartak.gard.ui.root_screen.navigation.RootScreen
 import ru.spartak.gard.ui.theme.GardTheme
 
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter")

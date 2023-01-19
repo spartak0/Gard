@@ -19,6 +19,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -28,7 +30,8 @@ import ru.spartak.gard.ui.details.BackBtn
 import ru.spartak.gard.ui.details.EditBtn
 import ru.spartak.gard.ui.details.TopBar
 import ru.spartak.gard.ui.details.bottomAlign
-import ru.spartak.gard.ui.navigation.Screen
+import ru.spartak.gard.ui.root_screen.navigation.RootScreen
+import ru.spartak.gard.ui.root_screen.navigation.Screen
 import ru.spartak.gard.ui.theme.*
 import ru.spartak.gard.utils.Constant
 
@@ -41,14 +44,12 @@ fun ProfileScreen(
     mainNavController: NavController,
     rootNavController: NavController,
     saveToastState: Boolean,
-    levelOnClick: () -> Unit
+    levelOnClick: () -> Unit,
+    viewModel: ProfileScreenViewModel= hiltViewModel(),
 ) {
     val visibleToast = remember { mutableStateOf(Pair(false, "")) }
     if (saveToastState) visibleToast.value = Pair(true, stringResource(id = R.string.saved))
     val copiedText = stringResource(id = R.string.copied)
-//    val visibleCopiedToast = remember { mutableStateOf(false) }
-//    val visibleSaveToast = remember { mutableStateOf(saveToastState) }
-//    val visibleToast = visibleCopiedToast.value or visibleSaveToast.value
     val visibleLogOutDialog = remember { mutableStateOf(false) }
     GardTheme {
         Column(
@@ -121,7 +122,8 @@ fun ProfileScreen(
                     .padding(horizontal = MaterialTheme.spacing.medium)
                     .fillMaxWidth()
             ) {
-                //todo log out on click
+                viewModel.signOut()
+                rootNavController.navigate(RootScreen.Login.route)
             }
         }
     }

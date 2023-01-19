@@ -27,7 +27,6 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import ru.spartak.gard.R
 import ru.spartak.gard.ui.details.*
-import ru.spartak.gard.ui.navigation.Screen
 import ru.spartak.gard.ui.theme.*
 import ru.spartak.gard.utils.ParserDecimal
 
@@ -53,7 +52,7 @@ fun ShopScreen(navController: NavController) {
                 ShopTopBar { navController.navigateUp() }
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.mediumLarge))
                 Text(
-                    text = "Your balance",
+                    text = stringResource(R.string.y_balance),
                     style = MaterialTheme.typography.body2,
                     color = Text500,
                     modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)
@@ -67,7 +66,7 @@ fun ShopScreen(navController: NavController) {
                 )
                 Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
                 Text(
-                    text = "Items",
+                    text = stringResource(R.string.items),
                     style = MaterialTheme.typography.body2,
                     color = Text500,
                     modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium)

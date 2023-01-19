@@ -14,17 +14,16 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -37,30 +36,30 @@ import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.coroutines.delay
 import ru.spartak.gard.R
+import ru.spartak.gard.data.db.firebase.getActivity
 import ru.spartak.gard.ui.details.BackBtn
 import ru.spartak.gard.ui.details.TopBar
 import ru.spartak.gard.ui.details.topAlign
-import ru.spartak.gard.ui.navigation.Graphs
-import ru.spartak.gard.ui.navigation.navigate
+import ru.spartak.gard.ui.root_screen.login_screen.LoginScreenViewModel
+import ru.spartak.gard.ui.root_screen.navigation.Graphs
+import ru.spartak.gard.ui.root_screen.navigation.navigate
 import ru.spartak.gard.ui.root_screen.main_screen.home_tab.edit_screen.OutlinedTextField
 import ru.spartak.gard.ui.root_screen.main_screen.home_tab.profile_screen.Toast
 import ru.spartak.gard.ui.theme.Error600
 import ru.spartak.gard.ui.theme.GardTheme
 import ru.spartak.gard.ui.theme.Tertiary500
 import ru.spartak.gard.ui.theme.spacing
+import ru.spartak.gard.utils.Constant
 import ru.spartak.gard.utils.StatusBarHeight
 import kotlin.time.Duration.Companion.seconds
-
-private lateinit var resendToken: PhoneAuthProvider.ForceResendingToken
-private lateinit var storedVerificationId: String
 
 @Composable
 fun ConfirmationScreen(
     navController: NavController,
     bundleNavigation: Bundle,
-    viewModel: ConfirmationViewModel = hiltViewModel(),
+    viewModel: LoginScreenViewModel = hiltViewModel(),
 ) {
-    val phoneNumber = "+79525500322"
+    val phoneNumber = bundleNavigation.getString(Constant.PHONE_NUMBER)?:""
     val text = remember {
         mutableStateOf("")
     }
@@ -70,24 +69,34 @@ fun ConfirmationScreen(
         targetValue = if (toastState.value.first && toastState.value.second == ToastState.Error
         ) Error600 else Tertiary500
     )
+    val context = LocalContext.current
 
     val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-
         override fun onVerificationCompleted(credential: PhoneAuthCredential) {
-            Log.d("AAA", "onVerificationCompleted:$credential")
+
+            Log.e("AAA", "onVerificationCompleted: 2")
         }
 
-        override fun onVerificationFailed(e: FirebaseException) {
-            Log.w("AAA", "onVerificationFailed", e)
-
-            when (e) {
-                is FirebaseAuthInvalidCredentialsException -> {
-                    // Invalid request
-                }
-                is FirebaseTooManyRequestsException -> {
-                    // The SMS quota for the project has been exceeded
-                }
-                else -> toastState.value = Triple(true, ToastState.Error as ToastState, e.message!!)
+        override fun onVerificationFailed(e: FirebaseException) = when (e) {
+            is FirebaseAuthInvalidCredentialsException -> {
+                Log.e("AAA", "onVerificationFailed: invalid phone number")
+                toastState.value = Triple(
+                    true,
+                    ToastState.Error as ToastState,
+                    context.getString(R.string.invalid_phone_number)
+                )
+            }
+            is FirebaseTooManyRequestsException -> {
+                Log.e("AAA", "onVerificationFailed: too many requests")
+                toastState.value = Triple(
+                    true,
+                    ToastState.Error as ToastState,
+                    context.getString(R.string.too_many_requests)
+                )
+            }
+            else -> {
+                Log.e("AAA", "onVerificationFailed: ${e.message}")
+                toastState.value = Triple(true, ToastState.Error as ToastState, e.message!!)
             }
         }
 
@@ -95,13 +104,12 @@ fun ConfirmationScreen(
             verificationId: String,
             token: PhoneAuthProvider.ForceResendingToken
         ) {
-            Log.d("AAA", "onCodeSent:$verificationId")
-            storedVerificationId = verificationId
-            resendToken = token
+            Log.e("AAA", "onVerificationSend: 1")
+            viewModel.storedVerificationId = verificationId
+            viewModel.resendToken = token
         }
     }
 
-    viewModel.sendVerificationCode(phoneNumber, callbacks, navController.context as Activity)
     GardTheme {
         Column {
             Spacer(modifier = Modifier.height(38.dp + MaterialTheme.spacing.small))
@@ -127,7 +135,7 @@ fun ConfirmationScreen(
                 onValueChange = { str ->
                     if (str.length <= 6) text.value = str
                     if (str.length == 6) viewModel.verifyPhoneNumberWithCode(
-                        verificationId = storedVerificationId,
+                        verificationId = viewModel.storedVerificationId,
                         code = str
                     ) { taskVerify ->
                         if (taskVerify.isSuccessful) {
@@ -137,28 +145,27 @@ fun ConfirmationScreen(
                                         Graphs.Main,
                                         bundleNavigation
                                     )
-                                    else toastState.value =
-                                        Triple(true, ToastState.Error, "Failed to update user")
+                                    else {
+                                        toastState.value =
+                                            Triple(
+                                                true,
+                                                ToastState.Error,
+                                                context.getString(R.string.failed_update_user)
+                                            )
+                                    }
                                 }
                             }
                         } else {
                             toastState.value =
-                                Triple(true, ToastState.Error, "Wrong code")
+                                Triple(
+                                    true,
+                                    ToastState.Error,
+                                    context.getString(R.string.wrong_code)
+                                )
                         }
                     }
                 }
-                //todo подумать как упростить
-//                code = storedVerificationId.value,
-//                onSuccess = {
-//                    navController.navigate(
-//                        Graphs.Main,
-//                        bundleNavigation
-//
-//                    )
-//                },
-//                onError = {
-//                    toastState.value = Triple(true, ToastState.Error, "Wrong code")
-//                }
+
             )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
             SendAgainBtn(
@@ -167,12 +174,16 @@ fun ConfirmationScreen(
                     .fillMaxWidth()
                     .height(41.dp),
                 onClick = {
-                    viewModel.resendVerificationCode(phoneNumber, resendToken, callbacks)
+                    viewModel.resendVerificationCode(
+                        phoneNumber,
+                        viewModel.resendToken,
+                        callbacks
+                    )
                     toastState.value =
                         Triple(
                             true,
                             ToastState.Info,
-                            "Another code was sended to your phone number"
+                            context.getString(R.string.another_code_sended)
                         )
                 }
             )
@@ -225,7 +236,7 @@ fun SendAgainBtn(modifier: Modifier, onClick: () -> Unit) {
     ) {
         val formatTime = "(${DateUtils.formatElapsedTime(tick.value.toLong())})"
         Text(
-            text = "Send  code again ${if (tick.value != 0) formatTime else ""}",
+            text = stringResource(id = R.string.send_code_again) + " ${if (tick.value != 0) formatTime else ""}",
             style = MaterialTheme.typography.body2,
             color = if (tick.value == 0) Tertiary500 else Tertiary500.copy(alpha = 0.5F)
         )
@@ -257,7 +268,7 @@ fun CodeTextField(
 @Composable
 fun TextConfirmation() {
     Text(
-        text = "We’ve send a confirmation code to your new E-mail.\nType it to proceed",
+        text = stringResource(id = R.string.sended_confirmation_code),
         modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium),
         style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Normal)
     )
@@ -266,7 +277,7 @@ fun TextConfirmation() {
 @Composable
 fun SubtitleConfirmation() {
     Text(
-        text = "Confirmation",
+        text = stringResource(id = R.string.confirmation),
         modifier = Modifier.padding(horizontal = MaterialTheme.spacing.medium),
         style = MaterialTheme.typography.h6.copy(fontSize = 30.sp)
     )

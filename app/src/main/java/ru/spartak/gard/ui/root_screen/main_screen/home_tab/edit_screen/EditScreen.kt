@@ -30,9 +30,9 @@ import ru.spartak.gard.ui.details.BackBtn
 import ru.spartak.gard.ui.details.CustomTextField
 import ru.spartak.gard.ui.details.LoadBtn
 import ru.spartak.gard.ui.details.TopBar
-import ru.spartak.gard.ui.navigation.RootScreen
-import ru.spartak.gard.ui.navigation.Screen
-import ru.spartak.gard.ui.navigation.navigate
+import ru.spartak.gard.ui.root_screen.navigation.RootScreen
+import ru.spartak.gard.ui.root_screen.navigation.Screen
+import ru.spartak.gard.ui.root_screen.navigation.navigate
 import ru.spartak.gard.ui.theme.*
 import ru.spartak.gard.utils.Constant
 

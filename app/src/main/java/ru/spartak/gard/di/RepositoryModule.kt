@@ -9,12 +9,14 @@ import com.google.firebase.ktx.Firebase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ActivityContext
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
-import ru.spartak.gard.data.FirebaseRepositoryImpl
-import ru.spartak.gard.data.FirebaseService
-import ru.spartak.gard.domain.FirebaseRepository
+import ru.spartak.gard.data.db.firebase.FirebaseRepositoryImpl
+import ru.spartak.gard.data.db.firebase.FirebaseService
+import ru.spartak.gard.data.network.ApiRepositoryImpl
+import ru.spartak.gard.data.network.api.RetrofitApi
+import ru.spartak.gard.domain.repository.ApiRepository
+import ru.spartak.gard.domain.repository.FirebaseRepository
 import javax.inject.Singleton
 
 @Module
@@ -35,13 +37,19 @@ object RepositoryModule {
 
     @Provides
     @Singleton
-    fun provideFirebaseService(@ApplicationContext context: Context ,auth:FirebaseAuth, database: FirebaseDatabase): FirebaseService {
-        return FirebaseService(context,auth, database)
+    fun provideFirebaseService(@ApplicationContext context: Context ,auth:FirebaseAuth): FirebaseService {
+        return FirebaseService(context,auth)
     }
 
     @Provides
     @Singleton
     fun provideFirebaseRepository(firebaseService: FirebaseService): FirebaseRepository {
         return FirebaseRepositoryImpl(firebaseService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideApiRepository(retrofitApi: RetrofitApi):ApiRepository {
+        return ApiRepositoryImpl(retrofitApi)
     }
 }

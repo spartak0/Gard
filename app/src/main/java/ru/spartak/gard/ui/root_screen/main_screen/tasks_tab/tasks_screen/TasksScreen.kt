@@ -27,7 +27,7 @@ import ru.spartak.gard.ui.details.Border
 import ru.spartak.gard.ui.details.CustomBtn
 import ru.spartak.gard.ui.details.TopBar
 import ru.spartak.gard.ui.details.border
-import ru.spartak.gard.ui.navigation.Screen
+import ru.spartak.gard.ui.root_screen.navigation.Screen
 import ru.spartak.gard.ui.theme.*
 
 @Composable
@@ -50,7 +50,7 @@ fun TasksScreen(navController: NavController) {
 @Composable
 fun TasksTopBar() {
     TopBar(
-        subtitleText = "Tasks",
+        subtitleText = stringResource(id = R.string.tasks),
         modifier = Modifier
             .padding(horizontal = MaterialTheme.spacing.medium)
             .fillMaxWidth()
@@ -214,15 +214,6 @@ fun TaskStatusView(taskStatus: TaskStatus) {
     }
 }
 
-fun PeriodicityColor(periodicity: String): Color {
-    return when (periodicity.lowercase()) {
-        "daily" -> Tertiary50
-        "weekly" -> Tertiary200
-        "Monthly" -> Tertiary400
-        else -> Tertiary50
-    }
-}
-
 @Composable
 fun EmptyListTasksContent(modifier: Modifier, navController: NavController) {
     Column(modifier = modifier) {
@@ -237,7 +228,7 @@ fun EmptyListTasksContent(modifier: Modifier, navController: NavController) {
         )
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
         Text(
-            text = "Oops!",
+            text = stringResource(R.string.oops),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.h4.copy(
                 fontWeight = FontWeight.Bold,
@@ -249,7 +240,7 @@ fun EmptyListTasksContent(modifier: Modifier, navController: NavController) {
         )
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
         Text(
-            text = "Your tasks list is empty. That’s because your haven’t got any games connected yet. Let’s handle this!",
+            text = stringResource(R.string.y_tasks_list_empty),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Normal),
             modifier = Modifier
@@ -259,7 +250,7 @@ fun EmptyListTasksContent(modifier: Modifier, navController: NavController) {
         )
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.mediumLarge))
         CustomBtn(
-            text = "Connect my first game",
+            text = stringResource(R.string.connect_my_first_game),
             modifier = Modifier
                 .padding(horizontal = MaterialTheme.spacing.medium)
                 .fillMaxWidth()

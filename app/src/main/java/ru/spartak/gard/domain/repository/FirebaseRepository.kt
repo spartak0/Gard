@@ -1,4 +1,4 @@
-package ru.spartak.gard.domain
+package ru.spartak.gard.domain.repository
 
 import android.app.Activity
 import com.google.android.gms.tasks.Task
@@ -20,5 +20,10 @@ interface FirebaseRepository {
     )
 
     fun verifyPhoneNumberWithCode(verificationId: String?, code: String): Task<AuthResult>
+
     fun updateUser(firebaseUser: FirebaseUser):Task<Void>
+
+    fun getCurrentUser():FirebaseUser?
+
+    fun signOut()
 }

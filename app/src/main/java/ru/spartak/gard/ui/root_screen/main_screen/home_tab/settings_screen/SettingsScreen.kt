@@ -86,13 +86,13 @@ fun SettingsScreen(navController: NavController) {
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.large))
             SubtitleControls()
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-            SwitchSettingsItem(text = "Contacts", checkState = checkContacts)
+            SwitchSettingsItem(text = stringResource(R.string.contacts), checkState = checkContacts)
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-            SwitchSettingsItem(text = "Microphone", checkState = checkMicrophone)
+            SwitchSettingsItem(text = stringResource(R.string.microphone), checkState = checkMicrophone)
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-            SwitchSettingsItem(text = "Location", checkState = checkLocation)
+            SwitchSettingsItem(text = stringResource(R.string.location), checkState = checkLocation)
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
-            SwitchSettingsItem(text = "Media", checkState = checkMedia)
+            SwitchSettingsItem(text = stringResource(R.string.media), checkState = checkMedia)
         }
     }
 }
@@ -219,13 +219,6 @@ fun SelectLanguageDialog(showDialog: MutableState<Boolean>, context: Context, mo
                                 .fillMaxSize()
                         ) {}
                     }
-
-//                    RadioButton(
-//                        selected = (entry.key == selectedOption),
-//                        modifier = Modifier.size(20.dp),
-//                        colors = RadioButtonDefaults.colors(selectedColor = Muted500),
-//                        onClick = {}
-//                    )
                     Spacer(modifier = Modifier.width(MaterialTheme.spacing.smallMedium))
                     Text(
                         text = entry.value,

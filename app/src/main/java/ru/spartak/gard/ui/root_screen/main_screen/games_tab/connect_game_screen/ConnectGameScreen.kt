@@ -24,8 +24,8 @@ import ru.spartak.gard.ui.details.BackBtn
 import ru.spartak.gard.ui.details.CustomTextField
 import ru.spartak.gard.ui.details.LoadBtn
 import ru.spartak.gard.ui.details.TopBar
-import ru.spartak.gard.ui.navigation.Screen
-import ru.spartak.gard.ui.navigation.navigate
+import ru.spartak.gard.ui.root_screen.navigation.Screen
+import ru.spartak.gard.ui.root_screen.navigation.navigate
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.games_screen.ConnectionStatus
 import ru.spartak.gard.ui.theme.GardTheme
 import ru.spartak.gard.ui.theme.Tertiary500
@@ -52,12 +52,12 @@ fun ConnectGameScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.mediumLarge))
             Text(
-                text = "Type your nickname",
+                text = stringResource(R.string.type_your_nickname),
                 style = MaterialTheme.typography.h5.copy(fontSize = 30.sp)
             )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
             Text(
-                text = "Use your actual nickname in Fortnite to connect game to your GARD games",
+                text = stringResource(R.string.use_actual_nickname),
                 style = MaterialTheme.typography.body2
             )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.mediumLarge))
@@ -93,7 +93,7 @@ fun ConnectGameScreen(navController: NavController) {
                         )
                         loadState.value=false
                     }
-                }, text = "Proceed", loadState = loadState.value
+                }, text = stringResource(R.string.procedd), loadState = loadState.value
             )
         }
     }

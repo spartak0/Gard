@@ -22,7 +22,7 @@ import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.rememberPagerState
 import ru.spartak.gard.R
 import ru.spartak.gard.ui.details.BtnGroup
-import ru.spartak.gard.ui.navigation.Screen
+import ru.spartak.gard.ui.root_screen.navigation.Screen
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.detail_screen.DetailsViewModel
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.detail_screen.stats_tab.models.Platform
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.detail_screen.stats_tab.models.StatTime

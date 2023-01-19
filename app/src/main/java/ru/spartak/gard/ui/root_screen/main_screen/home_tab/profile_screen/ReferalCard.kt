@@ -152,7 +152,7 @@ fun CopyBtn(modifier: Modifier, onClick: () -> Unit) {
                 tint = Muted100
             )
             Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
-            Text(text = "Copy", style = MaterialTheme.typography.body2)
+            Text(text = stringResource(R.string.copy), style = MaterialTheme.typography.body2)
         }
     }
 }

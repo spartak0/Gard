@@ -14,6 +14,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
@@ -21,7 +22,7 @@ import com.google.accompanist.pager.*
 import ru.spartak.gard.R
 import ru.spartak.gard.ui.details.Dialog
 import ru.spartak.gard.ui.details.bottomAlign
-import ru.spartak.gard.ui.navigation.Screen
+import ru.spartak.gard.ui.root_screen.navigation.Screen
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.games_screen.ConnectionStatus
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.games_screen.StatusGameView
 import ru.spartak.gard.ui.theme.*
@@ -126,7 +127,9 @@ fun InformationTab(connectionStatus: ConnectionStatus, navController: NavControl
                         .padding(horizontal = MaterialTheme.spacing.medium)
                         .padding(bottom = 40.dp)
                         .bottomAlign()
-                        .fillMaxWidth(), showDialog = showDialog
+                        .fillMaxWidth(),
+                    showDialog = showDialog,
+                    gameName = "Fortnite",
                 )
             }
         }
@@ -134,12 +137,12 @@ fun InformationTab(connectionStatus: ConnectionStatus, navController: NavControl
 }
 
 @Composable
-fun DisconnectGameDialog(modifier: Modifier, showDialog: MutableState<Boolean>) {
+fun DisconnectGameDialog(modifier: Modifier, showDialog: MutableState<Boolean>, gameName:String) {
     Dialog(
-        subtitle = "Are you sure you want disconnect Fortnite?",
-        text = "Your statistics will be reseted as well.",
-        confirmText = "Disconnect",
-        rejectText = "Cancel",
+        subtitle = "Are you sure you want disconnect $gameName?",
+        text = stringResource(R.string.statistic_reseted),
+        confirmText = stringResource(R.string.disconnect),
+        rejectText = stringResource(R.string.cancel),
         showDialog = showDialog,
         modifier = modifier
     ) {
@@ -151,7 +154,7 @@ fun DisconnectGameDialog(modifier: Modifier, showDialog: MutableState<Boolean>) 
 fun DisconnectTextBtn(modifier: Modifier, onClick: () -> Unit) {
     Box(modifier = modifier.clickable { onClick() }, contentAlignment = Alignment.Center) {
         Text(
-            text = "Disconnect from my games",
+            text = stringResource(R.string.disconnect_from_my_games),
             style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Medium),
             color = Error500,
         )
@@ -192,7 +195,7 @@ fun ConnectedActionBtn(modifier: Modifier, onClick: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "To the tasks",
+                text = stringResource(R.string.to_the_tasks),
                 style = MaterialTheme.typography.body2.copy(fontWeight = FontWeight.Medium)
             )
             Spacer(modifier = Modifier.width(MaterialTheme.spacing.extraSmall))
@@ -249,7 +252,7 @@ fun StructureView(text: List<String>, modifier: Modifier) {
                 .padding(MaterialTheme.spacing.medium)
                 .fillMaxWidth()
         ) {
-            Text(text = "Structure", style = MaterialTheme.typography.subtitle1)
+            Text(text = stringResource(R.string.structure), style = MaterialTheme.typography.subtitle1)
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
             text.forEach {
                 Text(text = "• $it", style = MaterialTheme.typography.body2)

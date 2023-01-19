@@ -14,8 +14,8 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import ru.spartak.gard.ui.navigation.BottomScreen
-import ru.spartak.gard.ui.navigation.MainNavGraph
+import ru.spartak.gard.ui.root_screen.navigation.BottomScreen
+import ru.spartak.gard.ui.root_screen.navigation.MainNavGraph
 import ru.spartak.gard.ui.theme.Dark300
 import ru.spartak.gard.ui.theme.GardTheme
 import ru.spartak.gard.ui.theme.White
@@ -104,12 +104,7 @@ fun RowScope.AddItem(
             }
         },
         selected = selected,
-//        selected = currentDestination?.hierarchy?.any {
-//            it.route == bottomScreen.route
-//        } == true,
         onClick = { navController.navigate(bottomScreen.route) },
-//        unselectedContentColor = Dark300,
-//        selectedContentColor = White,
     )
 }
 
