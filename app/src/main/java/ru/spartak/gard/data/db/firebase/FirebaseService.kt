@@ -13,7 +13,6 @@ import ru.spartak.gard.ui.main_activity.MainActivity
 import java.util.concurrent.TimeUnit
 
 class FirebaseService(
-    private val context: Context,
     private val auth: FirebaseAuth,
 ) {
 
@@ -22,7 +21,6 @@ class FirebaseService(
         callbacks: OnVerificationStateChangedCallbacks,
         activity: Activity
     ) {
-        Log.e("AAA", "sendVerificationCode: $phoneNumber")
         val options = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(phoneNumber)       // Phone number to verify
             .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
@@ -43,12 +41,13 @@ class FirebaseService(
     fun resendVerificationCode(
         phoneNumber: String,
         token: PhoneAuthProvider.ForceResendingToken?,
-        callbacks: OnVerificationStateChangedCallbacks
+        callbacks: OnVerificationStateChangedCallbacks,
+        activity: Activity,
     ) {
         val optionsBuilder = PhoneAuthOptions.newBuilder(auth)
             .setPhoneNumber(phoneNumber)       // Phone number to verify
             .setTimeout(60L, TimeUnit.SECONDS) // Timeout and unit
-            .setActivity(context as Activity)                 // Activity (for callback binding)
+            .setActivity(activity)                 // Activity (for callback binding)
             .setCallbacks(callbacks)          // OnVerificationStateChangedCallbacks
         if (token != null) {
             optionsBuilder.setForceResendingToken(token) // callback's ForceResendingToken
@@ -73,20 +72,4 @@ class FirebaseService(
     fun signOut(){
         auth.signOut()
     }
-    fun getPhoneNumber(){
-    }
-}
-
-fun Context.getActivity(): Activity? {
-    var currentContext = this
-    while (currentContext is ContextWrapper) {
-        if (currentContext is AppCompatActivity) {
-            return currentContext
-        }
-        if (currentContext is Activity) {
-            return currentContext
-        }
-        currentContext = currentContext.baseContext
-    }
-    return null
 }

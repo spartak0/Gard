@@ -9,6 +9,6 @@ object Constant {
     const val CONFIRMATION_BUNDLE = "main_graph_start_destination"
     const val START_VIEW_PAGER_TAB = "start_view_pager_tab"
     const val ERROR_TOAST_KEY = "start_view_pager_tab"
-    const val API_KEY = "70ce016a-52ef-4281-8019-4dd8a5747cb7"
+    const val API_KEY = "3c33636e-3c431a1a-404d0a55-61142994"
     const val PHONE_NUMBER = "phone_number"
 }

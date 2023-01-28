@@ -27,7 +27,7 @@ import ru.spartak.gard.ui.details.Border
 import ru.spartak.gard.ui.details.CustomBtn
 import ru.spartak.gard.ui.details.TopBar
 import ru.spartak.gard.ui.details.border
-import ru.spartak.gard.ui.root_screen.navigation.Screen
+import ru.spartak.gard.navigation.Screen
 import ru.spartak.gard.ui.theme.*
 
 @Composable

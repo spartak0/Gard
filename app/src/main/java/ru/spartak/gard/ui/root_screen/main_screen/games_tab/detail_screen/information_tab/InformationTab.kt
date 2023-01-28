@@ -22,7 +22,7 @@ import com.google.accompanist.pager.*
 import ru.spartak.gard.R
 import ru.spartak.gard.ui.details.Dialog
 import ru.spartak.gard.ui.details.bottomAlign
-import ru.spartak.gard.ui.root_screen.navigation.Screen
+import ru.spartak.gard.navigation.Screen
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.games_screen.ConnectionStatus
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.games_screen.StatusGameView
 import ru.spartak.gard.ui.theme.*

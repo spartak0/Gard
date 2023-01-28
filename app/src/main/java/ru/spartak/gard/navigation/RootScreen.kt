@@ -1,4 +1,4 @@
-package ru.spartak.gard.ui.root_screen.navigation
+package ru.spartak.gard.navigation
 
 sealed class RootScreen(val route: String) {
     object LevelUpScreen : Screen(route="level_up_screen")

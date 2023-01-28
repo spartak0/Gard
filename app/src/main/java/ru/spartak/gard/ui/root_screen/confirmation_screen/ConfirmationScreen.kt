@@ -1,7 +1,6 @@
 package ru.spartak.gard.ui.root_screen.confirmation_screen
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.util.Log
@@ -36,13 +35,13 @@ import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import kotlinx.coroutines.delay
 import ru.spartak.gard.R
-import ru.spartak.gard.data.db.firebase.getActivity
+import ru.spartak.gard.navigation.Graphs
+import ru.spartak.gard.navigation.navigate
 import ru.spartak.gard.ui.details.BackBtn
 import ru.spartak.gard.ui.details.TopBar
 import ru.spartak.gard.ui.details.topAlign
+import ru.spartak.gard.ui.main_activity.LocalActivity
 import ru.spartak.gard.ui.root_screen.login_screen.LoginScreenViewModel
-import ru.spartak.gard.ui.root_screen.navigation.Graphs
-import ru.spartak.gard.ui.root_screen.navigation.navigate
 import ru.spartak.gard.ui.root_screen.main_screen.home_tab.edit_screen.OutlinedTextField
 import ru.spartak.gard.ui.root_screen.main_screen.home_tab.profile_screen.Toast
 import ru.spartak.gard.ui.theme.Error600
@@ -59,7 +58,7 @@ fun ConfirmationScreen(
     bundleNavigation: Bundle,
     viewModel: LoginScreenViewModel = hiltViewModel(),
 ) {
-    val phoneNumber = bundleNavigation.getString(Constant.PHONE_NUMBER)?:""
+    val phoneNumber = bundleNavigation.getString(Constant.PHONE_NUMBER) ?: ""
     val text = remember {
         mutableStateOf("")
     }
@@ -70,7 +69,7 @@ fun ConfirmationScreen(
         ) Error600 else Tertiary500
     )
     val context = LocalContext.current
-
+    val activity = LocalActivity.current
     val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         override fun onVerificationCompleted(credential: PhoneAuthCredential) {
 
@@ -177,7 +176,8 @@ fun ConfirmationScreen(
                     viewModel.resendVerificationCode(
                         phoneNumber,
                         viewModel.resendToken,
-                        callbacks
+                        callbacks,
+                        activity
                     )
                     toastState.value =
                         Triple(

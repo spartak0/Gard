@@ -1,6 +1,5 @@
 package ru.spartak.gard.ui.root_screen.login_screen
 
-import android.app.Activity
 import android.util.Log
 import androidx.compose.animation.*
 import androidx.compose.foundation.Image
@@ -13,7 +12,6 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -40,16 +38,16 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.PhoneAuthCredential
 import com.google.firebase.auth.PhoneAuthProvider
 import ru.spartak.gard.R
-import ru.spartak.gard.data.db.firebase.getActivity
+import ru.spartak.gard.navigation.BottomScreen
+import ru.spartak.gard.navigation.RootScreen
+import ru.spartak.gard.navigation.navigate
 import ru.spartak.gard.ui.details.BackBtn
 import ru.spartak.gard.ui.details.TopBar
 import ru.spartak.gard.ui.details.topAlign
+import ru.spartak.gard.ui.main_activity.LocalActivity
 import ru.spartak.gard.ui.root_screen.confirmation_screen.ToastState
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.games_screen.ProceedBtn
 import ru.spartak.gard.ui.root_screen.main_screen.home_tab.profile_screen.Toast
-import ru.spartak.gard.ui.root_screen.navigation.BottomScreen
-import ru.spartak.gard.ui.root_screen.navigation.RootScreen
-import ru.spartak.gard.ui.root_screen.navigation.navigate
 import ru.spartak.gard.ui.theme.*
 import ru.spartak.gard.utils.Constant
 import ru.spartak.gard.utils.StatusBarHeight
@@ -65,6 +63,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginScreenViewModel = 
     )
     val loadStateBtn = remember { mutableStateOf(false) }
     val context = LocalContext.current
+    val activity = LocalActivity.current
     val callbacks = object : PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
         override fun onVerificationCompleted(credential: PhoneAuthCredential) {
             loadStateBtn.value = false
@@ -79,7 +78,7 @@ fun LoginScreen(navController: NavController, viewModel: LoginScreenViewModel = 
         }
 
         override fun onVerificationFailed(e: FirebaseException) {
-            loadStateBtn.value=false
+            loadStateBtn.value = false
             when (e) {
                 is FirebaseAuthInvalidCredentialsException -> {
                     toastState.value = Triple(
@@ -153,7 +152,11 @@ fun LoginScreen(navController: NavController, viewModel: LoginScreenViewModel = 
                 loadState = loadStateBtn.value
             ) {
                 loadStateBtn.value = true
-                viewModel.sendVerificationCode("+7${phoneNumber.value}", callbacks,context.getActivity()!!)
+                viewModel.sendVerificationCode(
+                    "+7${phoneNumber.value}",
+                    callbacks,
+                    activity
+                )
             }
         }
         AnimatedVisibility(

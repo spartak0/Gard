@@ -1,10 +1,10 @@
-package ru.spartak.gard.ui.root_screen.navigation.content
+package ru.spartak.gard.navigation.content
 
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import ru.spartak.gard.ui.root_screen.navigation.Screen
+import ru.spartak.gard.navigation.Screen
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.connect_game_screen.ConnectGameScreen
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.detail_screen.DetailsScreen
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.detail_screen.DetailsViewModel

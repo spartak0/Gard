@@ -24,8 +24,8 @@ import ru.spartak.gard.ui.details.BackBtn
 import ru.spartak.gard.ui.details.CustomTextField
 import ru.spartak.gard.ui.details.LoadBtn
 import ru.spartak.gard.ui.details.TopBar
-import ru.spartak.gard.ui.root_screen.navigation.Screen
-import ru.spartak.gard.ui.root_screen.navigation.navigate
+import ru.spartak.gard.navigation.Screen
+import ru.spartak.gard.navigation.navigate
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.games_screen.ConnectionStatus
 import ru.spartak.gard.ui.theme.GardTheme
 import ru.spartak.gard.ui.theme.Tertiary500

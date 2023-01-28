@@ -7,6 +7,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.PhoneAuthProvider
 
 interface FirebaseRepository {
+
     fun sendVerificationCode(
         phoneNumber: String,
         callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks,
@@ -16,7 +17,8 @@ interface FirebaseRepository {
     fun resendVerificationCode(
         phoneNumber: String,
         token: PhoneAuthProvider.ForceResendingToken?,
-        callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
+        callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks,
+        activity: Activity
     )
 
     fun verifyPhoneNumberWithCode(verificationId: String?, code: String): Task<AuthResult>

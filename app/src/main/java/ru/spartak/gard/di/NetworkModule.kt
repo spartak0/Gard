@@ -13,7 +13,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = "https://fortnite-api.com/"
+    private const val BASE_URL = "https://fortniteapi.io/"
 
     @Provides
     @Singleton

@@ -1,11 +1,16 @@
 package ru.spartak.gard.data.network.api
 
+import com.google.gson.JsonObject
 import retrofit2.Response
-import retrofit2.http.*
-import ru.spartak.gard.data.network.dto.BaseModel
-import ru.spartak.gard.data.network.dto.DataModel
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Query
+import ru.spartak.gard.data.network.dto.Data
 
 interface RetrofitApi {
-    @GET("v2/stats/br/v2")
-    suspend fun login(@Header("Authorization") apiKey: String , @Query("name") name: String): Response<BaseModel>
+    @GET("v1/stats")
+    suspend fun getStats(@Header("Authorization") apiKey: String, @Query("account") accountId:String): Response<Data>
+
+    @GET("v1/lookup")
+    suspend fun getAccountId(@Header("Authorization") apiKey: String , @Query("username") accountName:String): Response<JsonObject>
 }

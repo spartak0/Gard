@@ -19,9 +19,10 @@ class FirebaseRepositoryImpl(private val firebaseService: FirebaseService) : Fir
     override fun resendVerificationCode(
         phoneNumber: String,
         token: PhoneAuthProvider.ForceResendingToken?,
-        callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks
+        callbacks: PhoneAuthProvider.OnVerificationStateChangedCallbacks,
+        activity: Activity
     ) {
-        firebaseService.resendVerificationCode(phoneNumber, token, callbacks)
+        firebaseService.resendVerificationCode(phoneNumber, token, callbacks,activity)
     }
 
     override fun verifyPhoneNumberWithCode(

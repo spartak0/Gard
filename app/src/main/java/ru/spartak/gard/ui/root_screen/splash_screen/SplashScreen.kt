@@ -10,7 +10,6 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.core.os.bundleOf
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
@@ -19,10 +18,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import ru.spartak.gard.R
+import ru.spartak.gard.navigation.BottomScreen
+import ru.spartak.gard.navigation.Graphs
+import ru.spartak.gard.navigation.navigate
 import ru.spartak.gard.ui.details.GifImage
-import ru.spartak.gard.ui.root_screen.RootScreen
-import ru.spartak.gard.ui.root_screen.navigation.*
-import ru.spartak.gard.ui.theme.Dark50
 import ru.spartak.gard.ui.theme.GardTheme
 import ru.spartak.gard.utils.Constant
 
@@ -43,7 +42,7 @@ fun SplashScreen(navController: NavController, viewModel: SplashScreenViewModel 
     CoroutineScope(Dispatchers.Main).launch {
         delay(2000)
         val currentUser = viewModel.getCurrentUser()
-        if (currentUser == null) navController.navigate(RootScreen.Login.route) else navController.navigate(
+        if (currentUser == null) navController.navigate(ru.spartak.gard.navigation.RootScreen.Login.route) else navController.navigate(
             Graphs.Main,
             bundleOf(
                 Constant.MAIN_GRAPH_START_DESTINATION to BottomScreen.HomeScreen.route

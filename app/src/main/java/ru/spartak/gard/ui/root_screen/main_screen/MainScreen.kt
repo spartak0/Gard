@@ -14,8 +14,8 @@ import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import ru.spartak.gard.ui.root_screen.navigation.BottomScreen
-import ru.spartak.gard.ui.root_screen.navigation.MainNavGraph
+import ru.spartak.gard.navigation.BottomScreen
+import ru.spartak.gard.navigation.MainNavGraph
 import ru.spartak.gard.ui.theme.Dark300
 import ru.spartak.gard.ui.theme.GardTheme
 import ru.spartak.gard.ui.theme.White

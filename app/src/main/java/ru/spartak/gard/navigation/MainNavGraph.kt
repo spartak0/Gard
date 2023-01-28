@@ -1,4 +1,4 @@
-package ru.spartak.gard.ui.root_screen.navigation
+package ru.spartak.gard.navigation
 
 import android.os.Bundle
 import androidx.compose.runtime.Composable
@@ -8,9 +8,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.NavOptionsBuilder
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import ru.spartak.gard.ui.root_screen.navigation.content.gamesContentComposable
-import ru.spartak.gard.ui.root_screen.navigation.content.homeContentComposable
-import ru.spartak.gard.ui.root_screen.navigation.content.tasksContentComposable
+import ru.spartak.gard.navigation.content.gamesContentComposable
+import ru.spartak.gard.navigation.content.homeContentComposable
+import ru.spartak.gard.navigation.content.tasksContentComposable
 import ru.spartak.gard.ui.root_screen.main_screen.games_tab.games_screen.GamesScreen
 import ru.spartak.gard.ui.root_screen.main_screen.home_tab.home_screen.HomeScreen
 import ru.spartak.gard.ui.root_screen.main_screen.shop_tab.shop_screen.ShopScreen

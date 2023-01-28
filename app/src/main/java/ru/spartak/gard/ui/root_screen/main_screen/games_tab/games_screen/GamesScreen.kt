@@ -33,8 +33,8 @@ import ru.spartak.gard.ui.details.Border
 import ru.spartak.gard.ui.details.CustomTextField
 import ru.spartak.gard.ui.details.LoadBtn
 import ru.spartak.gard.ui.details.border
-import ru.spartak.gard.ui.root_screen.navigation.Screen
-import ru.spartak.gard.ui.root_screen.navigation.navigate
+import ru.spartak.gard.navigation.Screen
+import ru.spartak.gard.navigation.navigate
 import ru.spartak.gard.ui.theme.*
 import ru.spartak.gard.utils.Constant
 
@@ -84,9 +84,9 @@ fun GamesScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
             GameCard(
-                name = "Fortnite",
-                company = "Epic Games",
-                imageId = R.drawable.fortnite_image_tmp,
+                name = "Apex",
+                company = "Respawn Entertainment",
+                imageId = R.drawable.apex_background,
                 connectionStatus = ConnectionStatus.DISCONNECTED,
                 modifier = Modifier
                     .fillMaxWidth()
@@ -106,8 +106,8 @@ fun GamesScreen(navController: NavController) {
             )
             Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
             GameCard(
-                name = "Fortnite",
-                company = "Epic Games",
+                name = "Dota 2",
+                company = "Valve",
                 imageId = R.drawable.fortnite_image_tmp,
                 connectionStatus = ConnectionStatus.SOON,
                 modifier = Modifier

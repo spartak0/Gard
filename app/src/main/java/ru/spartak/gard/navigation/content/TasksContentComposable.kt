@@ -1,10 +1,10 @@
-package ru.spartak.gard.ui.root_screen.navigation.content
+package ru.spartak.gard.navigation.content
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import ru.spartak.gard.ui.root_screen.navigation.RootScreen
-import ru.spartak.gard.ui.root_screen.navigation.Screen
+import ru.spartak.gard.navigation.RootScreen
+import ru.spartak.gard.navigation.Screen
 import ru.spartak.gard.ui.root_screen.main_screen.home_tab.edit_screen.EditScreen
 import ru.spartak.gard.ui.root_screen.main_screen.home_tab.levels_screen.LevelsScreen
 import ru.spartak.gard.ui.root_screen.main_screen.home_tab.notifications_screen.NotificationsScreen
